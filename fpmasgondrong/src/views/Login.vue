@@ -22,3 +22,21 @@ template>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  name: 'LoginPage',
+  data() {
+    return {
+      email: '',
+      password: ''
+    };
+  },
+  methods: {
+    handleLogin() {
+      console.log('Login dengan:', this.email, this.password);
+      alert('Login berhasil (simulasi)');
+    }
+  }
+};
+</script>
