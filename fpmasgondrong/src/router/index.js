@@ -27,3 +27,8 @@ const routes = [
   { path: '/pembayaran', name: 'Pembayaran', component: Pembayaran },
   { path: '/riwayat', name: 'RiwayatPemesanan', component: RiwayatPemesanan }
 ]
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes
+})
