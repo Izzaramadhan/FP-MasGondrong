@@ -38,3 +38,32 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  name: 'RegisterPage',
+  data() {
+    return {
+      form: {
+        nama: '',
+        email: '',
+        no_hp: '',
+        alamat: '',
+        password: '',
+        konfirmasi: ''
+      }
+    };
+  },
+  methods: {
+    handleRegister() {
+      if (this.form.password !== this.form.konfirmasi) {
+        alert("Password dan konfirmasi tidak cocok.");
+        return;
+      }
+      // Simulasi pengiriman data
+      console.log("Data registrasi:", this.form);
+      alert("Pendaftaran berhasil (simulasi).");
+    }
+  }
+};
+</script>
