@@ -181,3 +181,50 @@ header .brand {
   font-weight: bold;
   color: #222;
 }
+
+.home .content h3 {
+  font-size: 4.5rem;
+  text-transform: uppercase;
+  color: var(--bg);
+}
+
+.home .content p {
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--bg);
+}
+.whatsapp-float {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  bottom: 20px;
+  right: 20px; /* posisi kiri bawah */
+  z-index: 9999; /* pastikan selalu di atas */
+  background-color: #25D366;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  transition: transform 0.2s ease;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1);
+}
+
+.whatsapp-float img {
+  width: 35px;
+  height: 35px;
+}
+
+.heading {
+  text-align: center;
+  font-size: 4rem;
+  margin-top: 5rem;
+}
+
+.heading span {
+  color: var(--main-color);
+}
