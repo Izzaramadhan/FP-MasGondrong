@@ -25,3 +25,29 @@
     </form>
   </div>
 </template>
+
+<script>
+export default {
+  name: 'PembayaranPage',
+  data() {
+    return {
+      metode: '',
+      formattedDate: ''
+    };
+  },
+  created() {
+    const today = new Date();
+    this.formattedDate = today.toLocaleDateString('id-ID', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    });
+  },
+  methods: {
+    handlePayment() {
+      // Di sini kita bisa ditambahkan validasi/metode simpan data pembayaran
+      alert(`Pembayaran dengan metode ${this.metode} berhasil (simulasi).`);
+    }
+  }
+};
+</script>
