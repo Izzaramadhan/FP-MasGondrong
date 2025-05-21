@@ -99,3 +99,26 @@ header .brand {
   border-bottom: 0.1rem solid var(--main-color);
   padding-bottom: 0.3rem;
 }
+
+/* Tombol-tombol */
+.btn-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-pesan,
+.btn-login {
+  padding: 8px 16px;
+  background-color: var(--main-color);
+  color: var(--bg);
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.btn-pesan:hover,
+.btn-login:hover {
+  background-color: var(--second-color);
+  color: white;
+}
