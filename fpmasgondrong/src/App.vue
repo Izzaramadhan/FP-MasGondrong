@@ -19,3 +19,15 @@ export default {
   }
 }
 </script>
+
+<style>
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1; /* Agar konten isi ruang di atas footer */
+}
+</style>
