@@ -74,3 +74,19 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.pemesanan-wrapper {
+  max-width: 500px;
+  margin: 80px auto;
+}
+.total-harga {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+.kendaraan-img {
+  width: 100%;
+  max-height: 250px;
+  object-fit: cover;
+}
+</style>
