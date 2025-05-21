@@ -41,3 +41,59 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.cara-sewa-page {
+  padding: 100px 20px 40px;
+  background-color: #f9f9f9;
+  text-align: center;
+  min-height: 100vh;
+}
+
+.title {
+  font-size: 3rem;
+  color: #1e73be;
+  margin-bottom: 3rem;
+  font-weight: bold;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.step {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.step-number {
+  background-color: #1e73be;
+  color: #fff;
+  font-size: 2rem;
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-title {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.step-desc {
+  font-size: 1.4rem;
+  color: #555;
+}
+</style>
