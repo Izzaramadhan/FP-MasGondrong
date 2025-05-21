@@ -337,3 +337,64 @@ header .brand {
 .menu .box-container .box:hover {
   background-color: var(--second-color);/* CART SECTION */
 }
+
+/* TESTIMONIALS SECTION */
+
+.review .box-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+  gap: 1.5rem;
+}
+
+.user {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80px; /* Atur ukuran sesuai keinginan */
+    height: 80px; /* Atur ukuran sesuai keinginan */
+    border-radius: 50%; /* Membuat gambar menjadi bulat */
+    object-fit: cover; /* Memastikan gambar tetap proporsional */
+}
+
+.quote {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.review .box-container .box {
+
+  background-color:var(--black);        /* tetap putih */
+  border-radius: 1rem; 
+  text-align: center;
+  padding: 3rem 2rem;
+
+  min-height: 400px; /* sesuaikan tinggi minimum */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.review .box-container .box p {
+  font-size: 1.5rem;
+  line-height: 1.8;
+  color: var(--bg);
+  padding: 2rem 0;
+}
+
+.review .box-container .box .user {
+  height: 7rem;
+  width: 7rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.review .box-container .box h3 {
+  padding: 1rem 0;
+  font-size: 2rem;
+  color: #fff;
+}
+
+.review .box-container .box .stars i {
+  font-size: 1.5rem;
+  color: var(--main-color);
+}
