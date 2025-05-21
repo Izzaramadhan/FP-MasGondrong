@@ -16,3 +16,34 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  name: 'EditProfilPage',
+  data() {
+    return {
+      form: {
+        nama: '',
+        email: '',
+        alamat: '',
+        no_hp: '',
+        password: ''
+      },
+      fields: [
+        { label: 'Nama', model: 'nama', inputType: 'text', type: 'input' },
+        { label: 'Email', model: 'email', inputType: 'email', type: 'input' },
+        { label: 'Alamat', model: 'alamat', inputType: '', type: 'textarea', rows: 3 },
+        { label: 'No HP', model: 'no_hp', inputType: 'text', type: 'input' },
+        { label: 'Password Baru (kosongkan jika tidak ingin ubah)', model: 'password', inputType: 'password', type: 'input' }
+      ]
+    };
+  },
+  methods: {
+    submitForm() {
+      // Di sini kamu bisa kirim data ke API atau hanya log untuk sementara
+      console.log('Data dikirim:', this.form);
+      alert('Data berhasil disimpan!');
+    }
+  }
+};
+</script>
