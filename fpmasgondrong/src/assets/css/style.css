@@ -18,3 +18,9 @@
   text-decoration: none;
   transition: 0.2s linear;
 }
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
