@@ -275,3 +275,65 @@ header .brand {
   padding: 1rem 0;
   line-height: 1.8;
 }
+
+/* MENU SECTION */
+
+.menu .box-container {
+    
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+  gap: 1.5rem;
+  
+}
+
+.menu .box-container .box {
+   
+    background-color:var(--bg);        /* tetap putih */
+    border: 2px solid #000;        /* garis hitam */
+    border-radius: 8px;
+    padding: 2rem;
+    margin: 1rem;                  /* beri jarak antar box */
+    text-align: center;
+  
+}
+
+.menu .d-flex {
+    justify-content: center; /* Membuat elemen di dalamnya ke tengah */
+    margin-bottom: 20px;
+}
+
+.menu .form-select {
+    width: 200px; /* Ukuran kecil, bisa diubah sesuai selera */
+    font-size: 14px; /* Perkecil teks */
+    padding: 5px 10px;
+}
+
+
+.menu .box-container .box img {
+  height: 10rem;
+   display: block;
+  margin: 0 auto;
+}
+
+
+.menu .box-container .box h3 {
+  color:var(--sixth-color);
+  font-size: 2rem;
+  padding: 1rem 0;
+}
+
+.menu .box-container .box .price {
+  color: var(--main-color);/* CART SECTION */
+  font-size: 2.5rem;
+  padding: 0.5rem 0;
+}
+
+.menu .box-container .box .price span {
+  font-size: 1.5rem;
+  text-decoration: line-through;
+  font-weight: lighter;
+}
+
+.menu .box-container .box:hover {
+  background-color: var(--second-color);/* CART SECTION */
+}
