@@ -33,3 +33,44 @@
     </div>
   </div>
 </template>
+
+<script>
+import { ref, computed, } from 'vue'
+import { useRoute } from 'vue-router'
+
+export default {
+  name: 'PemesananPage',
+  setup() {
+    const route = useRoute()
+    const kendaraanDipilih = ref(route.params.kendaraan || 'Honda Scoopy')
+
+    const tglMulai = ref('')
+    const tglSelesai = ref('')
+
+    const gambarKendaraan = computed(() => {
+      // Opsional: sesuaikan dengan nama file di /assets/images
+      const nama = kendaraanDipilih.value.toLowerCase()
+      if (nama.includes('Innova')) return require('@/assets/images/Innova.jpg')
+      if (nama.includes('Pajero')) return require('@/assets/images/Pajero.jpg')
+      if (nama.includes('vario')) return require('@/assets/images/vario.jpg')
+      return require('@/assets/images/Scoopy.jpg')
+    })
+
+    const pesanKendaraan = () => {
+      console.log('Pemesanan:', {
+        kendaraan: kendaraanDipilih.value,
+        tanggalMulai: tglMulai.value,
+        tanggalSelesai: tglSelesai.value
+      })
+    }
+
+    return {
+      kendaraanDipilih,
+      tglMulai,
+      tglSelesai,
+      pesanKendaraan,
+      gambarKendaraan
+    }
+  }
+}
+</script>
