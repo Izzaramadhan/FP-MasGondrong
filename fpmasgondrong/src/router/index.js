@@ -1,0 +1,11 @@
+import { createRouter, createWebHistory } from 'vue-router'
+
+import HomePage from '@/views/HomePage.vue'
+import Kelompok from '@/views/Kelompok.vue'
+import Login from '@/views/Login.vue'
+import CaraSewa from '@/views/CaraSewa.vue'
+import Register from '@/views/Register.vue'
+import EditProfil from '@/views/EditProfil.vue'
+import Pemesanan from '@/views/Pemesanan.vue'
+import Pembayaran from '@/views/Pembayaran.vue'
+import RiwayatPemesanan from '@/views/RiwayatPemesanan.vue'
