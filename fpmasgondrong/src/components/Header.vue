@@ -20,3 +20,34 @@
     </div>
   </header>
 </template>
+
+<script>
+export default {
+  name: 'AppHeader',
+  data() {
+    return {
+      isLoggedIn: false
+    }
+  },
+  mounted() {
+    // Cek status login dari localStorage
+    this.isLoggedIn = localStorage.getItem('userLoggedIn') === 'true'
+
+    // Dengarkan perubahan localStorage
+    window.addEventListener('storage', this.syncLoginState)
+  },
+  beforeUnmount() {
+    window.removeEventListener('storage', this.syncLoginState)
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem('userLoggedIn')
+      this.isLoggedIn = false
+      this.$router.push('/login')
+    },
+    syncLoginState() {
+      this.isLoggedIn = localStorage.getItem('userLoggedIn') === 'true'
+    }
+  }
+}
+</script>
