@@ -39,3 +39,8 @@ body {
   margin: 0;
   font-size: 1.6rem;
 }
+
+section {
+  padding: 4rem 5%;
+}
+
