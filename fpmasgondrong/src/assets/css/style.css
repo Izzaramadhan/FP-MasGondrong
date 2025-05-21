@@ -69,3 +69,21 @@ section {
   height: 60px;
   margin-right: 10px;
 }
+
+header .brand {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--main-color);
+}
+
+/* Bagian kanan header */
+.header .right {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.header .navbar {
+  display: flex;
+  gap: 1.5rem;
+}
