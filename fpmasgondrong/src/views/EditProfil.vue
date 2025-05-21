@@ -47,3 +47,13 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.login-box {
+  max-width: 500px;
+  margin: auto;
+  background: #f8f9fa;
+  padding: 30px;
+  border-radius: 8px;
+}
+</style>
