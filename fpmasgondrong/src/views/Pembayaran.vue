@@ -51,3 +51,18 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.pembayaran-wrapper {
+  max-width: 500px;
+  margin: 80px auto;
+  background: #f8f9fa;
+  padding: 30px;
+  border-radius: 8px;
+}
+.total-harga {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+}
+</style>
