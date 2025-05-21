@@ -3,7 +3,7 @@
     <!-- Hero Section -->
     <section class="hero py-5" 
      :style="{
-      backgroundImage: `url(${require('@/assets/images/Bannerr.jpeg')})`,
+      backgroundImage: `url(${require('@/assets/images/Banner2.jpeg')})`,
       backgroundSize: 'cover',
       backgroundPosition: 'center'
     }"
@@ -25,7 +25,7 @@
 
     </div>
   </div>
-</section>
+  </section>
 
 
     <!-- About Section -->
@@ -33,7 +33,7 @@
       <h1 class="heading"><span>Deskripsi </span> Singkat</h1>
       <div class="row g-0">
         <div class="image">
-          <img :src="require('@/assets/images/Banner(1).jpg')" alt="Banner perusahaan" class="img-fluid" width="600" height="400">
+          <img :src="require('@/assets/images/Banner1.jpeg')" alt="Banner perusahaan" class="img-fluid" width="600" height="400">
         </div>
         <div class="content">
           <h2>Sewa Kendaraan Lebih Mudah</h2>
