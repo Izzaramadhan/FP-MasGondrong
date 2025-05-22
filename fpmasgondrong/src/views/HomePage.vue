@@ -3,7 +3,7 @@
     <!-- Hero Section -->
     <section class="hero py-5" 
      :style="{
-      backgroundImage: `url(${require('@/assets/images/Banner2.jpeg')})`,
+      backgroundImage: `url(${require('@/assets/images/Bannerr.jpeg')})`,
       backgroundSize: 'cover',
       backgroundPosition: 'center'
     }"
@@ -25,7 +25,7 @@
 
     </div>
   </div>
-  </section>
+</section>
 
 
     <!-- About Section -->
@@ -33,7 +33,7 @@
       <h1 class="heading"><span>Deskripsi </span> Singkat</h1>
       <div class="row g-0">
         <div class="image">
-          <img :src="require('@/assets/images/Banner1.jpeg')" alt="Banner perusahaan" class="img-fluid" width="600" height="400">
+          <img :src="require('@/assets/images/Banner(1).jpg')" alt="Banner perusahaan" class="img-fluid" width="600" height="400">
         </div>
         <div class="content">
           <h2>Sewa Kendaraan Lebih Mudah</h2>
@@ -152,3 +152,58 @@
     </a>
   </main>
 </template>
+
+<script>
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+
+export default {
+  name: 'HomePage',
+  setup() {
+    const router = useRouter()
+
+    const kendaraan = ref([
+      { nama: 'Honda Beat', gambar: 'Beat.jpg', harga: 'Rp.100.000/hari', kategori: 'motor' },
+      { nama: 'Honda Scoopy', gambar: 'Scoopy.jpg', harga: 'Rp.125.000/hari', kategori: 'motor' },
+      { nama: 'Honda Vario', gambar: 'vario.jpg', harga: 'Rp.150.000/hari', kategori: 'motor' },
+      { nama: 'Mitsubishi Pajero', gambar: 'Pajero.jpg', harga: 'Rp.800.000/hari', kategori: 'mobil'},
+      { nama: 'Brio', gambar: 'Brio.jpeg', harga: 'Rp.375.000/hari', kategori: 'mobil' },
+      { nama: 'Toyota Zenix', gambar: 'Innova.jpg', harga: 'Rp.500.000/hari', kategori: 'mobil' }
+    ])
+
+    const kategoriDipilih = ref('')
+
+    const kendaraanTersaring = computed(() => {
+      if (!kategoriDipilih.value) return kendaraan.value
+      return kendaraan.value.filter(k => k.kategori === kategoriDipilih.value)
+    })
+
+    const testimonials = ref([
+      { nama: 'Danang', text: 'Pelayanannya cepat dan motornya bersih! Saya sewa Beat 3 hari dan semuanya lancar. Mas Gondrong juga ramah banget!', rating: 5 },
+      { nama: 'Ubay', text: 'Mobil Avanza yang saya sewa nyaman dipakai untuk perjalanan keluarga. Harganya juga bersahabat. Recommended!', rating: 5 },
+      { nama: 'Brodin', text: 'Pertama kali ke Jogja dan bingung cari kendaraan. Untung ketemu Sewa Kendaraan Mas Gondrong. Prosesnya gampang, motor langsung diantar ke hotel.', rating: 5 }
+    ])
+
+    const handleSewa = (namaKendaraan) => {
+      const isLoggedIn = localStorage.getItem('user')
+      if (!isLoggedIn) {
+        alert('Silakan login terlebih dahulu untuk melakukan pemesanan.')
+        router.push('/login')
+        return
+      }
+      router.push({ name: 'Pemesanan', params: { kendaraan: namaKendaraan } })
+    }
+
+    return {
+      kendaraan,
+      kategoriDipilih,
+      kendaraanTersaring,
+      testimonials,
+      handleSewa
+    }
+  }
+}
+</script>
+
+<style scoped>
+</style>
