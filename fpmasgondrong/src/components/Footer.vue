@@ -1,39 +1,27 @@
 <template>
-  <footer class="footer">
-    <div class="footer-container">
-      <!-- Kolom Logo dan Kontak -->
-      <div class="footer-column">
-        <img src="@/assets/images/logobaru2.png" alt="Logo" class="footer-logo" />
-        <p>MasGondrongrent@gmail.com</p>
-        <p>+62 917-134-1422</p>
-        <p>@MasGondrongrent</p>
-      </div>
-
-      <!-- Kolom Support -->
-      <div class="footer-column">
-        <h2>Support</h2>
-        <a href="#">Hubungi Kami</a>
-        <a href="#">Customer Service</a>
-      </div>
-
-      <!-- Kolom Company -->
-      <div class="footer-column">
-        <h2>Company</h2>
-        <a href="#">Tentang Kami</a>
-        <a href="#">Affiliates</a>
-        <a href="#">Partnership</a>
-      </div>
-
-      <!-- Kolom Newsletter -->
-      <div class="footer-column">
-        <h2>Newsletters</h2>
-        <p>Masukkan Email Anda Untuk Info Dan Update Terbaru!</p>
-        <input type="email" placeholder="Your Email Address" class="newsletter" />
+  <footer class="footer pt-5">
+    <div class="container text-center text-dark">
+      <h5>Hubungi <span class="text-primary">Kami</span></h5>
+      <p>Siap membantu perjalanan Anda</p>
+      <div class="row justify-content-center text-center mt-4">
+        <div class="col-md-4 mb-3">
+          <i class="bi bi-telephone-fill fs-3 text-info"></i>
+          <h6 class="mt-2">Telepon</h6>
+          <p class="small m-0">+62 853-5343-2343</p>
+        </div>
+        <div class="col-md-4 mb-3">
+          <i class="bi bi-envelope-fill fs-3 text-warning"></i>
+          <h6 class="mt-2">Email</h6>
+          <p class="small m-0">info@masgondrong.com</p>
+        </div>
+        <div class="col-md-4 mb-3">
+          <i class="bi bi-geo-alt-fill fs-3 text-success"></i>
+          <h6 class="mt-2">Alamat</h6>
+          <p class="small m-0">Jl. Sudirman No.123, Jakarta</p>
+        </div>
       </div>
     </div>
-
-    <hr />
-    <div class="credit">
+    <div class="footer-bottom text-center text-white py-2 mt-4">
       Mas Gondrong Rent © 2025 | All Rights Reserved.
     </div>
   </footer>
@@ -41,6 +29,16 @@
 
 <script>
 export default {
-  name: 'AppFooter'
-}
+  name: "AppFooter",
+};
 </script>
+
+<style scoped>
+.footer {
+  background-color: #f8f8f8;
+}
+
+.footer-bottom {
+  background-color: #53c9f5;
+}
+</style>

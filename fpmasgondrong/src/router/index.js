@@ -33,15 +33,4 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
-  const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true'
-  const protectedRoutes = ['Pemesanan', 'Pembayaran', 'RiwayatPemesanan']
-
-  if (protectedRoutes.includes(to.name) && !isLoggedIn) {
-    next({ name: 'Login' })
-  } else {
-    next()
-  }
-})
-
 export default router

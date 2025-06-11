@@ -1,34 +1,28 @@
 <template>
-  <div class="container pemesanan-wrapper">
-    <div class="card shadow">
-      <div class="card-body">
-        <!-- Info Kendaraan -->
-        <div class="text-center mb-3">
-          <img :src="gambarKendaraan" :alt="kendaraanDipilih" class="img-fluid kendaraan-img" />
-          <h5 class="mt-3">{{ kendaraanDipilih }}</h5>
-          <p class="text-muted">
-            Motor atau mobil pilihan yang siap digunakan untuk kebutuhan Anda.
-          </p>
+  <div class="pemesanan-wrapper">
+    <div class="pemesanan-card">
+      <div class="pemesanan-card-body">
+        <!-- Kolom Kiri -->
+        <div class="kendaraan-info">
+          <img :src="gambarKendaraan" alt="Gambar Kendaraan" />
+          <h5>{{ kendaraanDipilih }}</h5>
+          <p>Motor atau mobil pilihan yang siap digunakan untuk kebutuhan Anda.</p>
         </div>
 
-        <!-- Form -->
-        <form @submit.prevent="pesanKendaraan">
-          <div class="mb-3">
-            <label for="tgl_mulai" class="form-label">Tanggal Mulai</label>
-            <input type="date" v-model="tglMulai" class="form-control" id="tgl_mulai" required />
-          </div>
+        <!-- Kolom Kanan -->
+        <div class="form-pemesanan">
+          <form @submit.prevent="pesanKendaraan">
+            <label class="form-label">Tanggal Mulai</label>
+            <input type="date" v-model="tglMulai" class="form-control" required />
 
-          <div class="mb-3">
-            <label for="tgl_selesai" class="form-label">Tanggal Selesai</label>
-            <input type="date" v-model="tglSelesai" class="form-control" id="tgl_selesai" required />
-          </div>
+            <label class="form-label">Tanggal Selesai</label>
+            <input type="date" v-model="tglSelesai" class="form-control" required />
 
-          <div class="text-center mb-3">
             <div class="total-harga">Total Harga: Rp 125.000</div>
-          </div>
 
-          <router-link to="/pembayaran" class="btn btn-green w-100">Pesan Sekarang</router-link>
-        </form>
+            <button type="submit" class="btn-green">Pesan Sekarang</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -36,12 +30,13 @@
 
 <script>
 import { ref, computed, } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 export default {
   name: 'PemesananPage',
   setup() {
     const route = useRoute()
+    const router = useRouter()
     const kendaraanDipilih = ref(route.params.kendaraan || 'Honda Scoopy')
 
     const tglMulai = ref('')
@@ -62,6 +57,15 @@ export default {
         tanggalMulai: tglMulai.value,
         tanggalSelesai: tglSelesai.value
       })
+
+       localStorage.setItem('pemesananData', JSON.stringify({
+      kendaraan: kendaraanDipilih.value,
+      tanggalMulai: tglMulai.value,
+      tanggalSelesai: tglSelesai.value
+    }))
+
+    // Redirect ke pembayaran
+    router.push('/pembayaran')
     }
 
     return {
@@ -76,17 +80,5 @@ export default {
 </script>
 
 <style scoped>
-.pemesanan-wrapper {
-  max-width: 500px;
-  margin: 80px auto;
-}
-.total-harga {
-  font-weight: bold;
-  font-size: 1.2rem;
-}
-.kendaraan-img {
-  width: 100%;
-  max-height: 250px;
-  object-fit: cover;
-}
+
 </style>
