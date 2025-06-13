@@ -1,6 +1,5 @@
 <template>
   <main class="home">
-    <!-- Hero Section -->
     <section class="hero-section container py-5">
       <div class="row align-items-center">
         <div class="col-md-6 home-content">
@@ -16,7 +15,7 @@
       </div>
     </section>
 
-    <!-- Kendaraan Section -->
+    <!-- Kendaraan Carousel Section -->
     <section class="menu py-5" id="menu">
       <h2 class="text-center text-primary">Pilihan Mobil dan Motor Terbaik</h2>
       <p class="text-center text-muted">Berbagai jenis kendaraan berkualitas siap menemani perjalanan anda</p>
@@ -30,21 +29,27 @@
         </select>
       </div>
 
-      <div class="container">
-        <div class="row">
-          <div class="col-md-3 mb-4" v-for="(item, index) in kendaraanTersaring" :key="index">
-            <div class="card text-center kendaraan-card">
-              <img :src="require(`@/assets/images/${item.gambar}`)" class="img-fluid" />
-              <h5>{{ item.nama }}</h5>
-              <p class="text-primary">{{ item.harga }}</p>
-              <button class="btn btn-outline-primary" @click.prevent="handleSewa(item.nama)">Sewa Sekarang</button>
-            </div>
-          </div>
-        </div>
+      <div class="container text-center position-relative carousel-wrapper">
+        <button class="carousel-nav prev" @click="prevSlide" :disabled="slideIndex === 0">❮</button>
+
+       <div class="row flex-nowrap overflow-auto" style="gap: 1rem;">
+  <div class="col-md-4" v-for="(item, index) in kendaraanTampil" :key="index">
+    <div class="card kendaraan-card text-center shadow">
+      <img :src="getGambarUrl(item.gambar)" alt="Gambar kendaraan" class="img-fluid mb-3 kendaraan-img" />
+      <h5>{{ item.tipe }}</h5>
+      <p class="text-primary">Rp {{ formatHarga(item.harga_perhari) }}/hari</p>
+      <button class="btn btn-outline-primary mt-auto" @click="handleSewa(item.tipe)">Sewa Sekarang</button>
+    </div>
+  </div>
+</div>
+
+        <button class="carousel-nav next" @click="nextSlide" :disabled="slideIndex + 3 >= kendaraanTersaring.length">❯</button>
       </div>
     </section>
 
-    <!-- Testimoni -->
+
+ <!-- Testimoni -->
+<!-- Testimoni -->
     <section class="review py-5">
       <h2 class="text-center text-primary">Testimoni</h2>
       <div class="container">
@@ -62,6 +67,7 @@
         </div>
       </div>
     </section>
+
 
     <!-- Lokasi -->
     <section class="contact-section py-5 bg-light">
@@ -86,51 +92,228 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 
 export default {
   name: 'HomePage',
   setup() {
     const router = useRouter()
-
-    const kendaraan = ref([
-      { nama: 'Honda Beat', gambar: 'Beat.jpg', harga: 'Rp.100.000/hari', kategori: 'motor' },
-      { nama: 'Honda Scoopy', gambar: 'Scoopy.jpg', harga: 'Rp.125.000/hari', kategori: 'motor' },
-      { nama: 'Honda Vario', gambar: 'vario.jpg', harga: 'Rp.150.000/hari', kategori: 'motor' },
-      { nama: 'Mitsubishi Pajero', gambar: 'Pajero.jpg', harga: 'Rp.800.000/hari', kategori: 'mobil'},
-      { nama: 'Brio', gambar: 'Brio.jpeg', harga: 'Rp.375.000/hari', kategori: 'mobil' },
-      { nama: 'Toyota Zenix', gambar: 'Innova.jpg', harga: 'Rp.500.000/hari', kategori: 'mobil' }
-    ])
+    const kendaraan = ref([])
 
     const kategoriDipilih = ref('')
+    const slideIndex = ref(0)
+    
 
     const kendaraanTersaring = computed(() => {
       if (!kategoriDipilih.value) return kendaraan.value
-      return kendaraan.value.filter(k => k.kategori === kategoriDipilih.value)
+      return kendaraan.value.filter(k => k.jenis.toLowerCase() === kategoriDipilih.value.toLowerCase())
     })
 
+    const kendaraanTampil = computed(() => {
+      const start = slideIndex.value
+      return kendaraanTersaring.value.slice(start, start + 3)
+    })
+
+    const nextSlide = () => {
+      if (slideIndex.value + 3 < kendaraanTersaring.value.length) {
+        slideIndex.value += 1
+      }
+    }
+
+    const prevSlide = () => {
+      if (slideIndex.value > 0) {
+        slideIndex.value -= 1
+      }
+    }
+
+    watch(kategoriDipilih, () => {
+      slideIndex.value = 0
+    })
+
+    const handleSewa = (namaKendaraan) => {
+      router.push({ name: 'Pemesanan', params: { kendaraan: namaKendaraan } })
+    }
     const testimonials = ref([
       { nama: 'Danang', text: 'Pelayanannya cepat dan motornya bersih! Saya sewa Beat 3 hari dan semuanya lancar. Mas Gondrong juga ramah banget!', rating: 5 },
       { nama: 'Ubay', text: 'Mobil Avanza yang saya sewa nyaman dipakai untuk perjalanan keluarga. Harganya juga bersahabat. Recommended!', rating: 5 },
       { nama: 'Brodin', text: 'Pertama kali ke Jogja dan bingung cari kendaraan. Untung ketemu Sewa Kendaraan Mas Gondrong. Prosesnya gampang, motor langsung diantar ke hotel.', rating: 5 }
     ])
 
-   const handleSewa = (namaKendaraan) => {
-  router.push({ name: 'Pemesanan', params: { kendaraan: namaKendaraan } })
+const getGambarUrl = (namaFile) => {
+  const url = `http://localhost/1/backend/assets/vue/img/kendaraan/${namaFile}`;
+  console.log('Gambar URL:', url); // ✅ DEBUG: Cek ini di console browser
+  return url;
 }
+
+
+    const formatHarga = (harga) => {
+      return parseInt(harga).toLocaleString('id-ID')
+    }
+
+    const fetchData = async () => {
+      try {
+        const resKendaraan = await axios.get('http://localhost/1/backend/index.php/api/kendaraan')
+        kendaraan.value = resKendaraan.data
+
+      
+      } catch (error) {
+        console.error('Gagal mengambil data:', error)
+      }
+    }
+
+    onMounted(() => {
+      fetchData()
+    })
 
     return {
       kendaraan,
       kategoriDipilih,
       kendaraanTersaring,
-      testimonials,
-      handleSewa
+      kendaraanTampil,
+      handleSewa,
+      getGambarUrl,
+      formatHarga,
+      slideIndex,
+      nextSlide,
+      prevSlide,
+      testimonials
     }
   }
 }
 </script>
 
 <style scoped>
+/* Kendaraan Card */
+.kendaraan-card {
+  min-height: 400px;
+  max-width: 300px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 1rem;
+  padding: 1rem;
+  background: white;
+  transition: transform 0.3s ease;
+}
+
+.kendaraan-card:hover {
+  transform: translateY(-5px);
+}
+
+.kendaraan-img {
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+/* Row Kendaraan */
+.carousel-wrapper .row {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding: 1rem 0;
+  scroll-behavior: smooth;
+}
+
+.carousel-wrapper .col-md-4 {
+  flex: 0 0 auto;
+  width: 300px;
+}
+
+/* Tombol Carousel */
+.carousel-nav {
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  line-height: 36px;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+
+.carousel-nav.prev {
+  left: 0;
+}
+
+.carousel-nav.next {
+  right: 0;
+}
+
+/* Testimoni */
+.review-card {
+  min-height: 280px;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.review-card p {
+  font-size: 16px;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.review-card h5 {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.stars i {
+  color: #ffc107;
+}
+
+
+/* Review Card */
+.review-card {
+  background-color: #f9f9f9;
+  padding: 25px;
+  border-radius: 1rem;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.review-card:hover,
+.kendaraan-card:hover {
+  transform: translateY(-5px);
+}
+
+.stars i {
+  color: #ffc107;
+}
+.carousel-wrapper {
+  position: relative;
+}
+
+.carousel-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+}
+
+
 
 </style>
