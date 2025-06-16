@@ -1,19 +1,23 @@
 <template>
   <main class="home">
-    <section class="hero-section container py-5">
-      <div class="row align-items-center">
-        <div class="col-md-6 home-content">
-          <h1><span class="text-primary">Sewa Kendaraan</span> <span class="text-warning">Lebih Mudah</span></h1>
-          <p class="lead">Sewa Kendaraan Mas Gondrong adalah 
-            solusi sewa motor dan mobil terpercaya 
-            dengan proses mudah dan cepat.</p>
-          <a href="#menu" class="btn btn-info text-white">Sewa Sekarang</a>
-        </div>
-        <div class="col-md-6 text-center">
-          <img :src="require('@/assets/images/New.png')" class="hero-image shadow rounded" />
-        </div>
+  <section class="hero-section container py-5">
+    <div class="row align-items-center">
+      <div class="col-md-6 home-content">
+        <h1><span v-if="namaUser" class="fw-bold fs-5">Halo, {{ namaUser }}</span></h1>
+
+        <h2><span class="texth1">Selamat datang di Rental Mas Gondrong</span></h2>
+        <h3><span class="text-primary">Sewa Kendaraan</span> <span class="text-warning">Lebih Mudah</span></h3>
+        <p class="lead">
+          Sewa Kendaraan Mas Gondrong adalah solusi sewa motor dan mobil terpercaya
+          dengan proses mudah dan cepat.
+        </p>
+        <a href="#menu" class="btn btn-info text-white">Sewa Sekarang</a>
       </div>
-    </section>
+      <div class="col-md-6 text-center">
+        <img :src="require('@/assets/images/beranda/New.png')" class="hero-image shadow rounded" />
+      </div>
+    </div>
+  </section>
 
     <!-- Kendaraan Carousel Section -->
     <section class="menu py-5" id="menu">
@@ -48,7 +52,6 @@
     </section>
 
 
- <!-- Testimoni -->
 <!-- Testimoni -->
     <section class="review py-5">
       <h2 class="text-center text-primary">Testimoni</h2>
@@ -57,7 +60,7 @@
           <div class="col-md-4 mb-3" v-for="(review, i) in testimonials" :key="i">
             <div class="review-card">
               <p>{{ review.text }}</p>
-              <img :src="require('@/assets/images/logo.jpg')" :alt="review.nama" class="rounded-circle my-2" width="60" height="60" />
+              <img :src="require('@/assets/images/beranda/logo.jpg')" :alt="review.nama" class="rounded-circle my-2" width="60" height="60" />
               <h5>{{ review.nama }}</h5>
               <div class="stars">
                 <i class="fas fa-star" v-for="s in review.rating" :key="s"></i>
@@ -141,11 +144,15 @@ export default {
       { nama: 'Brodin', text: 'Pertama kali ke Jogja dan bingung cari kendaraan. Untung ketemu Sewa Kendaraan Mas Gondrong. Prosesnya gampang, motor langsung diantar ke hotel.', rating: 5 }
     ])
 
-const getGambarUrl = (namaFile) => {
-  const url = `http://localhost/1/backend/assets/vue/img/kendaraan/${namaFile}`;
-  console.log('Gambar URL:', url); // ✅ DEBUG: Cek ini di console browser
-  return url;
-}
+    const getGambarUrl = (namaFile) => {
+      const url = `http://localhost/1/backend/assets/vue/img/kendaraan/${namaFile}`;
+      console.log('Gambar URL:', url); // ✅ DEBUG: Cek ini di console browser
+      return url;
+    }
+    
+const namaUser = ref('')
+
+
 
 
     const formatHarga = (harga) => {
@@ -165,6 +172,10 @@ const getGambarUrl = (namaFile) => {
 
     onMounted(() => {
       fetchData()
+        const user = JSON.parse(localStorage.getItem('user'))
+  if (user && user.nama) {
+    namaUser.value = user.nama
+  }
     })
 
     return {
@@ -178,7 +189,8 @@ const getGambarUrl = (namaFile) => {
       slideIndex,
       nextSlide,
       prevSlide,
-      testimonials
+      testimonials,
+      namaUser
     }
   }
 }

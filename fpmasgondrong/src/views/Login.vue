@@ -33,10 +33,33 @@ export default {
     };
   },
   methods: {
-    handleLogin() {
-      console.log('Login dengan:', this.email, this.password);
-      alert('Login berhasil (simulasi)');
-    }
+handleLogin() {
+  fetch('http://localhost/1/backend/index.php/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email: this.email,
+      password: this.password
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+  if (data.status === 'success') {
+    alert('Login berhasil');
+
+    // Simpan ke localStorage
+    localStorage.setItem('user', JSON.stringify(data.user));
+
+    // TAMBAHKAN BARIS INI:
+    localStorage.setItem('userLoggedIn', 'true');
+    window.dispatchEvent(new Event('user-login-changed')); // agar header tahu
+
+    this.$router.push('/');
+  }
+
+  });
+}
+
   }
 };
 </script>

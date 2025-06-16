@@ -8,6 +8,14 @@
   --bg: #ffffff;
   --border: 0.1rem solid rgba(255, 255, 255, 0.3);
 }
+.texth1 {
+  font-size: 36px; /* Ukuran besar (bisa disesuaikan) */
+  color: var(--main-color);  /* Warna biru (bisa diganti ke warna lain) */
+  font-weight: bold;
+  display: block; /* Supaya mudah diatur posisinya */
+  margin-top: 20px;
+}
+
 
 * {
   font-family: 'Poppins', sans-serif;  

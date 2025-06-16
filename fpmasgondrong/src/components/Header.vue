@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <div class="header-inner d-flex justify-content-between align-items-center">
-      <img src="@/assets/images/logobaru2.png" alt="Logo Rental" class="img-logo" />
+      <img src="@/assets/images/navbar/logobaru2.png" alt="Logo Rental" class="img-logo" />
       <span class="brand">MasGondrong Rent</span>
     </div>
 
@@ -10,13 +10,14 @@
         <router-link to="/">Beranda</router-link>
         <router-link to="/kelompok">Tentang Kami</router-link>
         <router-link to="/cara-sewa">Cara Sewa</router-link>
+        <router-link to="/riwayat">Riwayat Pemesanan</router-link>
       </nav>
 
-      <div class="btn-group">
-        <router-link v-if="!isLoggedIn" to="/register" class="btn-pesan">Register</router-link>
-        <router-link v-if="!isLoggedIn" to="/login" class="btn-login">Login</router-link>
-        <button v-else @click="logout" class="btn-login">Logout</button>
-      </div>
+    <div class="btn-group">
+      <router-link v-if="!isLoggedIn" to="/login" class="btn-login">Login</router-link>
+      <button v-else @click="logout" class="btn-login">Logout</button>
+    </div>
+
     </div>
   </header>
 </template>
@@ -29,25 +30,28 @@ export default {
       isLoggedIn: false
     }
   },
-  mounted() {
-    // Cek status login dari localStorage
-    this.isLoggedIn = localStorage.getItem('userLoggedIn') === 'true'
+  created() {
+    this.syncLoginState()
 
-    // Dengarkan perubahan localStorage
-    window.addEventListener('storage', this.syncLoginState)
+    // Dengarkan perubahan login di seluruh halaman
+    window.addEventListener('user-login-changed', this.syncLoginState)
   },
   beforeUnmount() {
-    window.removeEventListener('storage', this.syncLoginState)
+    window.removeEventListener('user-login-changed', this.syncLoginState)
   },
   methods: {
     logout() {
+      localStorage.removeItem('user')
       localStorage.removeItem('userLoggedIn')
-      this.isLoggedIn = false
+      window.dispatchEvent(new Event('user-login-changed'))
       this.$router.push('/login')
     },
     syncLoginState() {
+      // Bisa pakai salah satu, keduanya sama-sama bisa
       this.isLoggedIn = localStorage.getItem('userLoggedIn') === 'true'
+      // atau: this.isLoggedIn = !!localStorage.getItem('user')
     }
   }
 }
+
 </script>

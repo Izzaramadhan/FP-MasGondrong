@@ -55,15 +55,31 @@ export default {
     };
   },
   methods: {
-    handleRegister() {
-      if (this.form.password !== this.form.konfirmasi) {
-        alert("Password dan konfirmasi tidak cocok.");
-        return;
-      }
-      // Simulasi pengiriman data
-      console.log("Data registrasi:", this.form);
-      alert("Pendaftaran berhasil (simulasi).");
-    }
+handleRegister() {
+  if (this.form.password !== this.form.konfirmasi) {
+    alert("Password dan konfirmasi tidak cocok.");
+    return;
+  }
+
+  console.log("Data dikirim ke backend:", this.form); // ✅ DEBUG DI SINI
+
+  fetch("http://localhost/1/backend/index.php/auth/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(this.form)
+  })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data);
+      alert(data.message);
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Gagal mengirim data ke server.");
+    });
+}
+
+
   }
 };
 </script>

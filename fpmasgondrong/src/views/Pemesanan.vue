@@ -50,23 +50,38 @@ export default {
       if (nama.includes('vario')) return require('@/assets/images/vario.jpg')
       return require('@/assets/images/Scoopy.jpg')
     })
+const pesanKendaraan = () => {
+  const user = JSON.parse(localStorage.getItem('user')) || {}
+  const id_user = user.id_user
+  const id_kendaraan = route.params.id_kendaraan || 1 // Pastikan id_kendaraan ada
 
-    const pesanKendaraan = () => {
-      console.log('Pemesanan:', {
-        kendaraan: kendaraanDipilih.value,
-        tanggalMulai: tglMulai.value,
-        tanggalSelesai: tglSelesai.value
-      })
+  const totalHarga = 125000 // (optional) bisa dihitung otomatis dari tanggal
 
-       localStorage.setItem('pemesananData', JSON.stringify({
-      kendaraan: kendaraanDipilih.value,
-      tanggalMulai: tglMulai.value,
-      tanggalSelesai: tglSelesai.value
-    }))
+  const data = {
+    id_user,
+    id_kendaraan,
+    tgl_mulai: tglMulai.value,
+    tgl_selesai: tglSelesai.value,
+    total_harga: totalHarga
+  }
 
-    // Redirect ke pembayaran
-    router.push('/pembayaran')
+  fetch('http://localhost/1/backend/index.php/pemesanan/simpan', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(response => {
+    if (response.status === 'success') {
+      alert('Pemesanan berhasil!')
+      router.push('/pembayaran')
+    } else {
+      alert('Gagal menyimpan data pemesanan.')
     }
+  })
+  .catch(() => alert('Terjadi kesalahan saat menghubungi server.'))
+}
+
 
     return {
       kendaraanDipilih,
