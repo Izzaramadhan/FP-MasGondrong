@@ -54,5 +54,6 @@ $route['(:any)'] = 'vue/index';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 $route['api/kendaraan'] = 'Kendaraan/index';
+$route['api/pemesanan/riwayat/(:num)'] = 'api/Pemesanan/riwayat/$1';
 
 
