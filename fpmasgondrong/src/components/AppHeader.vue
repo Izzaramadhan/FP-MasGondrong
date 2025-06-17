@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <header class="header">
     <div class="header-inner d-flex justify-content-between align-items-center">
@@ -44,7 +45,7 @@ export default {
       localStorage.removeItem('user')
       localStorage.removeItem('userLoggedIn')
       window.dispatchEvent(new Event('user-login-changed'))
-      this.$router.push('/login')
+      this.$router.push('/')
     },
     syncLoginState() {
       // Bisa pakai salah satu, keduanya sama-sama bisa

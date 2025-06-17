@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <AppHeader />
+    <AppHeader v-if="$route.meta.showHeader !== false" />
     <main class="main-content">
       <router-view />
     </main>
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import AppHeader from '@/components/Header.vue'
+import AppHeader from '@/components/AppHeader.vue'
 import AppFooter from '@/components/Footer.vue'
 
 export default {
