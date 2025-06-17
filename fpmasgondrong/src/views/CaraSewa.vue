@@ -1,4 +1,5 @@
 <template>
+
   <div class="cara-sewa-page">
     <h1 class="title">Cara Sewa Kendaraan</h1>
     <div class="steps">

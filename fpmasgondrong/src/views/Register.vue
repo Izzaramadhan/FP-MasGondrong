@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="register-box">
-      <h4 class="text-center mb-4">Daftar Akun Marketplace</h4>
+      <h4 class="text-center mb-4">Register</h4>
 
       <form @submit.prevent="handleRegister">
         <div class="mb-3">

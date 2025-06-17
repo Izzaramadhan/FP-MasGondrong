@@ -16,8 +16,12 @@
       </form>
 
       <p class="text-center mt-3">
-        Bethisum punya akun?
+        Belum punya akun?
         <router-link to="/register" class="text-decoration-none">Daftar Disini</router-link>
+      </p>
+      <p class="text-center mt-3">
+        Login sebagai Admin?
+        <router-link to="/adminlogin" class="text-decoration-none">Klik  Disini</router-link>
       </p>
     </div>
   </div>
