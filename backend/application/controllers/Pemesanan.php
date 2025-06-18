@@ -12,7 +12,12 @@ class Pemesanan extends CI_Controller
         header("Access-Control-Allow-Headers: Content-Type");
 
     }
-
+    public function index()
+    {
+        $data = $this->PemesananModel->get_all_with_relations();
+        echo json_encode($data);
+    }
+    
     public function simpan() {
         $input = file_get_contents('php://input');
         $data = json_decode($input, true);
@@ -57,4 +62,31 @@ class Pemesanan extends CI_Controller
             'data' => $data
         ]);
     }
+    public function get_all() {
+      $this->load->model('PemesananModel');
+      $data = $this->Pemesanan_model->get_all_with_relations();
+      echo json_encode($data);
+  }
+  public function update_status()
+{
+    $id = $this->input->post('id_pemesanan');
+    $status = $this->input->post('status');
+
+    if (!$id || !$status) {
+        echo json_encode(['success' => false, 'error' => 'Missing ID or Status']);
+        return;
+    }
+
+    $this->load->database();
+    $this->db->where('id_pemesanan', $id);
+    $updated = $this->db->update('pemesanan', ['status' => $status]);
+
+    if ($updated) {
+        echo json_encode(['success' => true]);
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Failed to update']);
+    }
+}
+
+  
 }
