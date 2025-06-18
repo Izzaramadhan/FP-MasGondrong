@@ -56,3 +56,6 @@ $route['translate_uri_dashes'] = FALSE;
 $route['api/kendaraan'] = 'Kendaraan/index';
 $route['api/pemesanan'] = 'Pemesanan/index';
 $route['api/pengguna'] = 'Pengguna/index';
+$route['api/pemesanan/riwayat/(:num)'] = 'pemesanan/riwayat/$1';
+
+

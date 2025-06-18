@@ -1,14 +1,26 @@
 <?php
 class PemesananModel extends CI_Model {
 
-    public function getRiwayatByUser($id_user) {
-        $this->db->select('p.id_pemesanan, p.tgl_mulai, p.total_harga, p.status, k.tipe as kendaraan');
-        $this->db->from('sewa_kendaraan_pemesanan p');
-        $this->db->join('sewa_kendaraan_kendaraan k', 'p.id_kendaraan = k.id_kendaraan');
+    public function getRiwayatByUser($id_user)
+    {
+        $this->db->select('p.*, k.tipe, k.jenis, k.plat_nomor');
+        $this->db->from('pemesanan p');
+        $this->db->join('kendaraan k', 'k.id_kendaraan = p.id_kendaraan');
         $this->db->where('p.id_user', $id_user);
-        $this->db->order_by('p.tgl_mulai', 'DESC');
         return $this->db->get()->result();
     }
+    public function getByUser($id_user)
+{
+    $this->db->select('p.*, u.nama as nama_user, k.tipe as nama_kendaraan');
+    $this->db->from('pemesanan p');
+    $this->db->join('user u', 'u.id_user = p.id_user');
+    $this->db->join('kendaraan k', 'k.id_kendaraan = p.id_kendaraan');
+    $this->db->where('p.id_user', $id_user);
+    return $this->db->get()->result();
+}
+
+    
+
     public function insert($data) {
         return $this->db->insert('pemesanan', [
           'id_user' => $data['id_user'],

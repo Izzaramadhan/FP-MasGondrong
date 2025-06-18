@@ -54,14 +54,17 @@ class Pemesanan extends CI_Controller
         echo json_encode(['status' => $result ? 'success' : 'error']);
       }
 
-    public function riwayat($id_user)
-    {
-        $data = $this->PemesananModel->getRiwayatByUser($id_user);
-        echo json_encode([
-            'status' => true,
-            'data' => $data
-        ]);
-    }
+public function riwayat($id_user)
+{
+    $this->load->model('PemesananModel');
+    $result = $this->PemesananModel->getRiwayatByUser($id_user);
+
+    echo json_encode([
+        'status' => true,
+        'data' => $result
+    ]);
+}
+
     public function get_all() {
       $this->load->model('PemesananModel');
       $data = $this->Pemesanan_model->get_all_with_relations();
