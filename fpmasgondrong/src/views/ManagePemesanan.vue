@@ -33,7 +33,7 @@ export default {
     }
   },
   mounted() {
-    axios.get('http://localhost/1/backend/index.php/api/pemesanan')
+    axios.get('http://localhost/penjol/backend/index.php/api/pemesanan')
       .then(res => {
         this.pemesanan = res.data;
       })
@@ -43,7 +43,7 @@ export default {
   },
   methods: {
 updateStatus(id_pemesanan, status) {
-  axios.post(`http://localhost/1/backend/index.php/pemesanan/update_status`, {
+  axios.post("http://localhost/penjol/backend/index.php/pemesanan/update_status", {
     id_pemesanan,
     status
   }).then(() => {

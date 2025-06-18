@@ -775,3 +775,63 @@ html, body {
   color: #60626a;
   font-size: 1.4rem;
 }
+
+/* === Tentang Kami & Visi Misi === */
+.tentang-section {
+  background: linear-gradient(to right, #ffffff, #f8f9fa);
+  padding: 60px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.tentang-section h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.tentang-section h5 {
+  font-weight: 600;
+  color: #343a40;
+}
+
+.tentang-section p {
+  font-size: 1.3rem;
+  line-height: 1.7;
+  color: #6c757d;
+}
+
+.tentang-section ul {
+  font-size: 1.3rem;
+  list-style: disc;
+  padding-left: 1.5rem;
+  color: #6c757d;
+}
+
+.tentang-section ul li {
+  margin-bottom: 8px;
+}
+
+/* === Ikon checklist === */
+.tentang-section .fa-check-circle {
+  color: #28a745;
+  margin-right: 8px;
+}
+
+/* === Animasi AOS tambahan === */
+[data-aos="fade-left"],
+[data-aos="fade-right"] {
+  transition: all 1s ease-in-out;
+}
+
+/* === Efek tambahan ruangan masuk dari bawah (opsional) === */
+[data-aos="zoom-in"] {
+  transform: scale(0.95);
+  opacity: 0;
+  transition: all 0.7s ease-in-out;
+}
+
+[data-aos="zoom-in"].aos-animate {
+  transform: scale(1);
+  opacity: 1;
+}

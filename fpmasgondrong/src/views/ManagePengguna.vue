@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     getPengguna() {
-      axios.get('http://localhost/1/backend/index.php/api/pengguna')
+      axios.get('http://localhost/penjol/backend/index.php/api/pengguna')
         .then(response => {
           this.pengguna = response.data;
         })
@@ -51,7 +51,7 @@ export default {
     },
     hapusPengguna(id) {
       if (confirm('Yakin ingin menghapus pengguna ini?')) {
-        axios.get(`http://localhost/1/backend/index.php/api/pengguna/delete/${id}`)
+        axios.get(`http://localhost/penjol/backend/index.php/api/pengguna/delete/${id}`)
           .then(res => {
             if (res.data.success) {
               this.getPengguna(); // refresh data

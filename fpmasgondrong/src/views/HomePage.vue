@@ -19,6 +19,48 @@
     </div>
   </section>
 
+<!-- Tentang Kami & Visi Misi -->
+<section class="tentang-section py-5 bg-light">
+  <div class="container">
+    <div class="row align-items-center">
+      <!-- Kolom Kiri: Visi & Misi -->
+        <div class="col-md-6 mb-4 mb-md-0" data-aos="zoom-in" data-aos-delay="100">
+
+        <h2 class="text-primary mb-3">Visi & Misi</h2>
+        <h5 class="text-dark">Visi</h5>
+        <p class="text-muted">
+          Menjadi penyedia layanan sewa kendaraan terpercaya dan terbaik di Yogyakarta yang mengutamakan kenyamanan, keamanan, dan kepuasan pelanggan.
+        </p>
+        <h5 class="text-dark mt-3">Misi</h5>
+        <ul class="text-muted">
+          <li>Menyediakan armada kendaraan yang bersih, terawat, dan siap pakai.</li>
+          <li>Memberikan pelayanan yang ramah, cepat, dan profesional.</li>
+          <li>Menjaga harga sewa yang kompetitif dan transparan.</li>
+          <li>Terus berinovasi dalam layanan untuk memenuhi kebutuhan pelanggan.</li>
+        </ul>
+      </div>
+
+      <!-- Kolom Kanan: Tentang Kami -->
+      <div class="col-md-6" data-aos="fade-left">
+        <h2 class="text-primary mb-3">Tentang Kami</h2>
+        <p>
+          Mas Gondrong Rent adalah layanan sewa kendaraan yang berbasis di Yogyakarta,
+          menyediakan berbagai jenis motor dan mobil dengan harga terjangkau, proses pemesanan mudah, dan pelayanan yang ramah.
+        </p>
+        <p>
+          Kami telah melayani ratusan pelanggan dengan berbagai kebutuhan — dari liburan, perjalanan bisnis, hingga kegiatan kampus.
+          Kepuasan pelanggan adalah prioritas utama kami.
+        </p>
+        <ul class="list-unstyled">
+          <li><i class="fas fa-check-circle text-success me-2"></i> Armada bersih dan terawat</li>
+          <li><i class="fas fa-check-circle text-success me-2"></i> Harga transparan tanpa biaya tersembunyi</li>
+          <li><i class="fas fa-check-circle text-success me-2"></i> Gratis antar jemput di area tertentu</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
     <!-- Kendaraan Carousel Section -->
     <section class="menu py-5" id="menu">
       <h2 class="text-center text-primary">Pilihan Mobil dan Motor Terbaik</h2>
