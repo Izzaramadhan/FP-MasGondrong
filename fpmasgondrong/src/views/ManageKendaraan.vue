@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     ambilDataKendaraan() {
-  axios.get('http://localhost/1/backend/index.php/api/kendaraan')
+  axios.get('http://localhost/2/backend/index.php/api/kendaraan')
     .then(response => {
       this.kendaraan = response.data;
     })
@@ -54,7 +54,7 @@ export default {
     });
     },
 hapusKendaraan(id) {
-  axios.delete(`http://localhost/1/backend/index.php/api/kendaraan/${id}`)
+  axios.delete(`http://localhost/2/backend/index.php/api/kendaraan/${id}`)
     .then(() => {
       this.kendaraan = this.kendaraan.filter(k => k.id_kendaraan !== id);
     })
