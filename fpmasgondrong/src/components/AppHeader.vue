@@ -9,7 +9,7 @@
     <div class="right">
       <nav class="navbar">
         <router-link to="/">Beranda</router-link>
-        <router-link to="/kelompok">Tentang Kami</router-link>
+        <router-link to="/kelompok">Tim</router-link>
         <router-link to="/cara-sewa">Cara Sewa</router-link>
         <router-link to="/riwayat">Riwayat Pemesanan</router-link>
       </nav>

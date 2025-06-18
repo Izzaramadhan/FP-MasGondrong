@@ -25,7 +25,7 @@
       <p class="text-center text-muted">Berbagai jenis kendaraan berkualitas siap menemani perjalanan anda</p>
 
       <div class="d-flex justify-content-center align-items-center my-3">
-        <label for="kategori" class="me-2">Pilih Kategori:</label>
+        <label for="kategori" class="me-2">Pilih Kategori :</label>
         <select id="kategori" class="form-select w-auto" v-model="kategoriDipilih">
           <option value="">Semua Kendaraan</option>
           <option value="mobil">Mobil</option>
@@ -34,7 +34,7 @@
       </div>
 
       <div class="container text-center position-relative carousel-wrapper">
-        <button class="carousel-nav prev" @click="prevSlide" :disabled="slideIndex === 0">❮</button>
+        <button class="carousel-nav prev" @click="prevSlide" :disabled="slideIndex === 0"> ❮</button>
 
        <div class="row flex-nowrap overflow-auto" style="gap: 1rem;">
   <div class="col-md-4" v-for="(item, index) in kendaraanTampil" :key="index">
@@ -70,7 +70,6 @@
         </div>
       </div>
     </section>
-
 
     <!-- Lokasi -->
     <section class="contact-section py-5 bg-light">
@@ -152,9 +151,6 @@ export default {
     
 const namaUser = ref('')
 
-
-
-
     const formatHarga = (harga) => {
       return parseInt(harga).toLocaleString('id-ID')
     }
@@ -164,7 +160,6 @@ const namaUser = ref('')
         const resKendaraan = await axios.get('http://localhost/1/backend/index.php/api/kendaraan')
         kendaraan.value = resKendaraan.data
 
-      
       } catch (error) {
         console.error('Gagal mengambil data:', error)
       }
