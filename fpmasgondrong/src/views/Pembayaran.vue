@@ -3,25 +3,31 @@
     <h4 class="text-center mb-3">Pembayaran</h4>
 
     <div class="total-harga">
-      Total: Rp 125.000
+      Total: Rp {{ jml_bayar.toLocaleString('id-ID') }}
     </div>
 
-    <div class="mb-3">
-      <label for="tgl_bayar" class="form-label">Tanggal Bayar</label>
-      <input type="text" id="tgl_bayar" class="form-control" :value="formattedDate" readonly />
-    </div>
+    <form @submit.prevent="handlePayment" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label for="tgl_bayar" class="form-label">Tanggal Bayar</label>
+        <input type="text" id="tgl_bayar" class="form-control" :value="formattedDate" readonly />
+      </div>
 
-    <form @submit.prevent="handlePayment">
       <div class="mb-3">
         <label for="metode" class="form-label">Metode Pembayaran</label>
         <select v-model="metode" id="metode" class="form-select" required>
           <option value="">-- Pilih Metode --</option>
           <option value="TF">Transfer</option>
           <option value="Qris">QRIS</option>
-          <option value="TUNAI">Tunai</option>
+          <option value="Tunai">Tunai</option>
         </select>
       </div>
-      <router-link to="/" class="btn btn-green w-100">Bayar Sekarang</router-link>
+
+      <div class="mb-3">
+        <label for="bukti" class="form-label">Upload Bukti Pembayaran</label>
+        <input type="file" @change="handleFileChange" class="form-control" accept="image/*,.pdf" required />
+      </div>
+
+      <button type="submit" class="btn btn-green w-100">Bayar Sekarang</button>
     </form>
   </div>
 </template>
@@ -32,25 +38,70 @@ export default {
   data() {
     return {
       metode: '',
-      formattedDate: ''
+      formattedDate: '',
+      jml_bayar: 125000,
+      buktiFile: null,
+      id_pemesanan: null
     };
   },
   created() {
     const today = new Date();
-    this.formattedDate = today.toLocaleDateString('id-ID', {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric'
-    });
+    this.formattedDate = today.toISOString().split('T')[0];
+
+    // Ambil id_pemesanan dari route query
+    this.id_pemesanan = this.$route.query.id_pemesanan;
+
+    if (!this.id_pemesanan) {
+      alert('ID Pemesanan tidak ditemukan. Silakan ulangi proses pemesanan.');
+      this.$router.push('/');
+    }
   },
   methods: {
-    handlePayment() {
-      // Di sini kita bisa ditambahkan validasi/metode simpan data pembayaran
-      alert(`Pembayaran dengan metode ${this.metode} berhasil (simulasi).`);
+    handleFileChange(e) {
+      this.buktiFile = e.target.files[0];
+    },
+    async handlePayment() {
+      if (!this.metode || !this.buktiFile) {
+        alert('Lengkapi semua data!');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('id_pemesanan', this.id_pemesanan);
+      formData.append('tgl_bayar', this.formattedDate);
+      formData.append('metode', this.metode);
+      formData.append('jml_bayar', this.jml_bayar);
+      formData.append('bukti_bayar', this.buktiFile);
+
+      try {
+        const res = await fetch('http://localhost/2/backend/index.php/api/pembayaran/simpan', {
+          method: 'POST',
+          body: formData
+        });
+
+        const resultText = await res.text();
+        console.log('Raw response:', resultText);
+
+        let result;
+        try {
+          result = JSON.parse(resultText);
+        } catch (jsonErr) {
+          console.error('❌ Bukan JSON:', resultText);
+          alert('Terjadi kesalahan di server: ' + resultText);
+          return;
+        }
+
+        alert(result.message);
+        this.$router.push('/');
+      } catch (err) {
+        console.error('❌ Error saat fetch:', err);
+        alert('Gagal melakukan pembayaran.');
+      }
     }
   }
 };
 </script>
+
 
 <style scoped>
 .pembayaran-wrapper {

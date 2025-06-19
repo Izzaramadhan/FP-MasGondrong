@@ -31,6 +31,12 @@ const routes = [
     props: true,
     meta: { showHeader: true }
   },
+  {
+    path: '/pemesanan/:id_kendaraan',
+    name: 'Pemesanan',
+    component: () => import('@/views/Pemesanan.vue')
+  }
+,  
   { path: '/pembayaran', name: 'Pembayaran', component: Pembayaran, meta: { showHeader: true } },
   { path: '/riwayat', name: 'RiwayatPemesanan', component: RiwayatPemesanan, meta: { showHeader: true } },
 

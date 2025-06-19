@@ -84,7 +84,8 @@
       <img :src="getGambarUrl(item.gambar)" alt="Gambar kendaraan" class="img-fluid mb-3 kendaraan-img" />
       <h5>{{ item.tipe }}</h5>
       <p class="text-primary">Rp {{ formatHarga(item.harga_perhari) }}/hari</p>
-      <button class="btn btn-outline-primary mt-auto" @click="handleSewa(item.tipe)">Sewa Sekarang</button>
+ <button class="btn btn-outline-primary mt-auto" @click="handleSewa(item)">Sewa Sekarang</button>
+
     </div>
   </div>
 </div>
@@ -176,9 +177,15 @@ export default {
       slideIndex.value = 0
     })
 
-    const handleSewa = (namaKendaraan) => {
-      router.push({ name: 'Pemesanan', params: { kendaraan: namaKendaraan } })
+const handleSewa = (item) => {
+  router.push({
+    name: 'Pemesanan',
+    params: {
+      id_kendaraan: item.id_kendaraan
     }
+  })
+}
+
     const testimonials = ref([
       { nama: 'Danang', text: 'Pelayanannya cepat dan motornya bersih! Saya sewa Beat 3 hari dan semuanya lancar. Mas Gondrong juga ramah banget!', rating: 5 },
       { nama: 'Ubay', text: 'Mobil Avanza yang saya sewa nyaman dipakai untuk perjalanan keluarga. Harganya juga bersahabat. Recommended!', rating: 5 },
@@ -186,8 +193,8 @@ export default {
     ])
 
     const getGambarUrl = (namaFile) => {
-      const url = `http://localhost/1/backend/assets/vue/img/kendaraan/${namaFile}`;
-      console.log('Gambar URL:', url); // ✅ DEBUG: Cek ini di console browser
+      const url = `http://localhost/2/backend/assets/vue/img/kendaraan/${namaFile}`;
+      console.log('Gambar URL:', url); 
       return url;
     }
     
@@ -199,7 +206,7 @@ const namaUser = ref('')
 
     const fetchData = async () => {
       try {
-        const resKendaraan = await axios.get('http://localhost/1/backend/index.php/api/kendaraan')
+        const resKendaraan = await axios.get('http://localhost/2/backend/index.php/api/kendaraan')
         kendaraan.value = resKendaraan.data
 
       } catch (error) {

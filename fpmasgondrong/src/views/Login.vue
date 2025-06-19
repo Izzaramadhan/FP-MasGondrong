@@ -52,7 +52,7 @@ handleLogin() {
     alert('Login berhasil');
 
     // Simpan ke localStorage
-localStorage.setItem('id_user', data.user.id_user);
+localStorage.setItem('user', JSON.stringify(data.user));
 
 
     // TAMBAHKAN BARIS INI:
