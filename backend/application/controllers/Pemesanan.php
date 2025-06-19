@@ -44,15 +44,21 @@ class Pemesanan extends CI_Controller
     
         $this->load->model('PemesananModel');
         $result = $this->PemesananModel->insert([
-          'id_user' => $id_user,
-          'id_kendaraan' => $id_kendaraan,
-          'tgl_mulai' => $tgl_mulai,
-          'tgl_selesai' => $tgl_selesai,
-          'total_harga' => $total_harga,
-          'status' => 'diproses'
-        ]);
-    
-        echo json_encode(['status' => $result ? 'success' : 'error']);
+            'id_user' => $id_user,
+            'id_kendaraan' => $id_kendaraan,
+            'tgl_mulai' => $tgl_mulai,
+            'tgl_selesai' => $tgl_selesai,
+            'total_harga' => $total_harga,
+            'status' => 'diproses'
+          ]);
+          
+          $id_pemesanan = $this->db->insert_id(); // ambil id terakhir
+          
+          echo json_encode([
+            'status' => $result ? 'success' : 'error',
+            'id_pemesanan' => $id_pemesanan // kirim id ke frontend
+          ]);
+          
         log_message('debug', 'DATA MASUK: ' . print_r($data, true));
 log_message('debug', 'HASIL INSERT: ' . ($result ? 'berhasil' : 'gagal'));
 

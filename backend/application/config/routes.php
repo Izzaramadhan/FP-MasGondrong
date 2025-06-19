@@ -55,11 +55,14 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 $route['api/kendaraan'] = 'Kendaraan/index';
 $route['api/kendaraan/(:num)'] = 'kendaraan/get_by_id/$1';
-$route['api/pemesanan'] = 'Pemesanan/index';
+
 $route['api/pengguna'] = 'Pengguna/index';
 
+$route['api/pemesanan'] = 'Pemesanan/index';
 $route['api/pemesanan/riwayat/(:num)'] = 'pemesanan/riwayat/$1';
 $route['api/pemesanan/simpan'] = 'pemesanan/simpan';
+
+$route['api/pembayaran/simpan'] = 'pembayaran/simpan';
 
 $route['(:any)'] = 'vue/index';
 
