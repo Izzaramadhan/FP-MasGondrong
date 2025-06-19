@@ -207,13 +207,13 @@ const namaUser = ref('')
       }
     }
 
-    onMounted(() => {
-      fetchData()
-        const user = JSON.parse(localStorage.getItem('user'))
-  if (user && user.nama) {
-    namaUser.value = user.nama
-  }
-    })
+        onMounted(() => {
+          fetchData()
+            const user = JSON.parse(localStorage.getItem('user'))
+      if (user && user.nama) {
+        namaUser.value = user.nama
+      }
+        })
 
     return {
       kendaraan,
