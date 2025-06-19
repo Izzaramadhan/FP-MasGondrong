@@ -21,16 +21,16 @@ class PemesananModel extends CI_Model {
 
     
 
-    public function insert($data) {
-        return $this->db->insert('pemesanan', [
-          'id_user' => $data['id_user'],
-          'id_kendaraan' => $data['id_kendaraan'],
-          'tgl_mulai' => $data['tgl_mulai'],
-          'tgl_selesai' => $data['tgl_selesai'],
-          'total_harga' => $data['total_harga'],
-          'status' => 'diproses'
-        ]);
-      }
+        public function insert($data) {
+            return $this->db->insert('pemesanan', [
+            'id_user' => $data['id_user'],
+            'id_kendaraan' => $data['id_kendaraan'],
+            'tgl_mulai' => $data['tgl_mulai'],
+            'tgl_selesai' => $data['tgl_selesai'],
+            'total_harga' => $data['total_harga'],
+            'status' => 'diproses'
+            ]);
+        }
       public function get_all_with_relations() {
         $this->db->select('p.*, u.nama as nama_user, k.tipe as nama_kendaraan');
         $this->db->from('pemesanan p'); // ✅ Ubah dari sewa_kendaraan_pemesanan

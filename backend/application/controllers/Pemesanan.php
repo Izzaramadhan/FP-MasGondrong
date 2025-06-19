@@ -20,12 +20,13 @@ class Pemesanan extends CI_Controller
     
     public function simpan() {
         $input = file_get_contents('php://input');
+        log_message('debug', 'RAW INPUT: ' . $input);  // Tambahkan baris ini untuk cek input
+    
         $data = json_decode($input, true);
     
-        // Cek jika JSON tidak valid
-        if (!is_array($data)) {
-          echo json_encode(['status' => 'error', 'message' => 'Format JSON tidak valid']);
-          return;
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            echo json_encode(['status' => 'error', 'message' => 'Format JSON tidak valid']);
+            return;
         }
     
         // Ambil nilai satu-satu dan beri nilai default jika kosong
@@ -52,6 +53,9 @@ class Pemesanan extends CI_Controller
         ]);
     
         echo json_encode(['status' => $result ? 'success' : 'error']);
+        log_message('debug', 'DATA MASUK: ' . print_r($data, true));
+log_message('debug', 'HASIL INSERT: ' . ($result ? 'berhasil' : 'gagal'));
+
       }
 
 public function riwayat($id_user)

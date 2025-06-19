@@ -25,6 +25,7 @@ class Kendaraan extends CI_Controller {
         $data = $this->Kendaraan_model->get_all();
         echo json_encode($data);
     }
+    
 
     public function delete() {
         $id = $this->input->post('id');
@@ -32,5 +33,18 @@ class Kendaraan extends CI_Controller {
         $this->Kendaraan_model->delete($id);
         echo json_encode(['status' => 'deleted']);
     }
+
+    public function get_by_id($id)
+    {
+        $this->load->model('Kendaraan_model');
+        $data = $this->Kendaraan_model->get_by_id($id);
+    
+        if ($data) {
+            echo json_encode(['status' => 'success', 'data' => $data]);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Data tidak ditemukan']);
+        }
+    }
+    
     
  }
