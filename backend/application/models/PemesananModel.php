@@ -57,6 +57,12 @@ class PemesananModel extends CI_Model {
             echo json_encode(['status' => 'error', 'message' => 'Invalid input']);
         }
     }
+    public function updateStatus($id, $status)
+{
+    $this->db->where('id_pemesanan', $id);
+    return $this->db->update('pemesanan', ['status' => $status]);
+}
+
     
     
   }

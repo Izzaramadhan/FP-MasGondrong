@@ -114,4 +114,26 @@ if (!$cekPemesanan) {
         header("Access-Control-Allow-Headers: Content-Type, Content-Length, Accept-Encoding");
         exit(0);
     }
+    public function update_status()
+    {
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: POST, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type');
+    
+        $json = file_get_contents("php://input");
+        $data = json_decode($json, true);
+    
+        $id = $data['id_pembayaran'] ?? null;
+        $status = $data['status'] ?? null;
+    
+        if ($id && $status) {
+            $this->db->where('id_pembayaran', $id);
+            $success = $this->db->update('pembayaran', ['status' => $status]);
+    
+            echo json_encode(['success' => $success]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Data tidak lengkap']);
+        }
+    }
+    
 }

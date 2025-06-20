@@ -18,4 +18,14 @@ class Kendaraan_model extends CI_Model {
     public function delete($id) {
         return $this->db->delete('kendaraan', ['id_kendaraan' => $id]);
     }
+    public function simpan($data)
+{
+    return $this->db->insert('kendaraan', $data);
+}
+public function update($id, $data)
+{
+    $this->db->where('id_kendaraan', $id);
+    return $this->db->update('kendaraan', $data);
+}
+
 }
