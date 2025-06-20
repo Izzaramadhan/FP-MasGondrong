@@ -9,6 +9,11 @@ class PemesananModel extends CI_Model {
         $this->db->where('p.id_user', $id_user);
         return $this->db->get()->result();
     }
+    public function getById($id)
+{
+    return $this->db->get_where('pemesanan', ['id_pemesanan' => $id])->row();
+}
+
     public function getByUser($id_user)
 {
     $this->db->select('p.*, u.nama as nama_user, k.tipe as nama_kendaraan');

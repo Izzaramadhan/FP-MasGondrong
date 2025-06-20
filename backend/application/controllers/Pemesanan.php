@@ -100,6 +100,18 @@ public function riwayat($id_user)
         echo json_encode(['success' => false, 'error' => 'Failed to update']);
     }
 }
+public function get_by_id($id_pemesanan)
+{
+    $this->load->model('PemesananModel');
+    $result = $this->PemesananModel->getById($id_pemesanan);
+
+    if ($result) {
+        echo json_encode(['status' => true, 'data' => $result]);
+    } else {
+        echo json_encode(['status' => false, 'message' => 'Pemesanan tidak ditemukan.']);
+    }
+}
+
 
   
 }

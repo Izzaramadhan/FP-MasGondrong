@@ -61,7 +61,10 @@ $route['api/pengguna'] = 'Pengguna/index';
 $route['api/pemesanan'] = 'Pemesanan/index';
 $route['api/pemesanan/riwayat/(:num)'] = 'pemesanan/riwayat/$1';
 $route['api/pemesanan/simpan'] = 'pemesanan/simpan';
+$route['api/pemesanan/(:num)'] = 'pemesanan/get_by_id/$1';
 
+
+$route['api/pembayaran'] = 'Pembayaran/index';
 $route['api/pembayaran/simpan'] = 'pembayaran/simpan';
 
 $route['(:any)'] = 'vue/index';

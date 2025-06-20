@@ -14,6 +14,16 @@ class Pembayaran extends CI_Controller
         $this->load->database();
         $this->load->helper(['url', 'file']);
     }
+    public function index()
+{
+    $query = $this->db->get('pembayaran');
+    $result = $query->result();
+
+    $this->output
+        ->set_content_type('application/json')
+        ->set_output(json_encode($result));
+}
+
 
     public function simpan()
     {
