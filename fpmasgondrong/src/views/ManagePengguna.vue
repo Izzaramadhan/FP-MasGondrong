@@ -12,12 +12,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="u in pengguna" :key="u.id">
+        <tr v-for="u in pengguna" :key="u.id_user">
           <td>{{ u.nama }}</td>
           <td>{{ u.email }}</td>
-          <td>{{ u.nohp }}</td>
+          <td>{{ u.no_hp }}</td>
           <td>
-            <button @click="hapusPengguna(u.id)">Hapus</button>
+            <button @click="hapusPengguna(u.id_user)">Hapus</button>
           </td>
         </tr>
       </tbody>
@@ -40,15 +40,17 @@ export default {
     this.getPengguna();
   },
   methods: {
-    getPengguna() {
-      axios.get('http://localhost/2/backend/index.php/api/pengguna')
-        .then(response => {
-          this.pengguna = response.data;
-        })
-        .catch(error => {
-          console.error('Gagal mengambil data pengguna:', error);
-        });
-    },
+getPengguna() {
+  axios.get('http://localhost/2/backend/index.php/api/pengguna')
+    .then(response => {
+      console.log('DATA PENGGUNA:', response.data); // lihat struktur di console
+      this.pengguna = response.data;
+    })
+    .catch(error => {
+      console.error('Gagal mengambil data pengguna:', error);
+    });
+}
+,
     hapusPengguna(id) {
       if (confirm('Yakin ingin menghapus pengguna ini?')) {
         axios.get(`http://localhost/2/backend/index.php/api/pengguna/delete/${id}`)
