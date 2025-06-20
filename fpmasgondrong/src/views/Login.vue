@@ -38,7 +38,7 @@ export default {
   },
   methods: {
 handleLogin() {
-  fetch('http://localhost/1/backend/index.php/auth/login', {
+  fetch('http://localhost/2/backend/index.php/auth/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
