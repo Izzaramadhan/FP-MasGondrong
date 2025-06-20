@@ -59,8 +59,8 @@ $route['api/kendaraan/simpan'] = 'Kendaraan/simpan';
 $route['api/kendaraan/update/(:num)'] = 'kendaraan/update/$1';
 $route['api/kendaraan/delete'] = 'kendaraan/delete';
 
-
-$route['api/pengguna'] = 'Pengguna/index';
+$route['api/pengguna'] = 'pengguna/index';
+$route['api/pengguna/delete/(:num)'] = 'pengguna/delete/$1';
 
 $route['api/pemesanan'] = 'Pemesanan/index';
 $route['api/pemesanan/riwayat/(:num)'] = 'pemesanan/riwayat/$1';

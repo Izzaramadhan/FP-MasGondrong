@@ -16,7 +16,7 @@ class Pengguna extends CI_Controller {
 
     // Hapus pengguna berdasarkan ID
     public function delete($id) {
-        $this->db->where('id', $id);
+        $this->db->where('id_user', $id); // ganti id → id_user
         $deleted = $this->db->delete('user');
         if ($deleted) {
             echo json_encode(['success' => true]);
@@ -24,4 +24,6 @@ class Pengguna extends CI_Controller {
             echo json_encode(['success' => false, 'error' => 'Gagal menghapus data']);
         }
     }
+    
+    
 }
