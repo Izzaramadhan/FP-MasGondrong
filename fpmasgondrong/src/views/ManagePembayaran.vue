@@ -4,11 +4,15 @@
     <h1>MANAGE PEMBAYARAN</h1>
     <div class="grid-container">
       <div v-for="p in pembayaran" :key="p.id" class="card">
+        <!-- Tambahkan gambar bukti bayar -->
+        <img :src="getGambarUrl(p.bukti_bayar)" alt="Bukti Pembayaran" class="bukti-img" />
+
         <p><strong>ID Pemesanan:</strong> {{ p.id_pemesanan }}</p>
         <p><strong>Tanggal Bayar:</strong> {{ p.tgl_bayar }}</p>
-        <p><strong>Jumlah Bayar:</strong> Rp {{ p.jml_bayar }}</p>
+        <p><strong>Jumlah Bayar:</strong> Rp {{ p.jml_bayar.toLocaleString('id-ID') }}</p>
         <p><strong>Metode:</strong> {{ p.metode }}</p>
         <p><strong>Status:</strong> {{ p.status }}</p>
+
         <div class="btn-group">
           <button @click="ubahStatus(p.id, 'lunas')">Set Lunas</button>
           <button @click="ubahStatus(p.id, 'belum lunas')">Set Belum Lunas</button>
@@ -19,26 +23,40 @@
 </template>
 
 
+
 <script>
-import NavbarAdmin from '@/components/NavbarAdmin.vue';
+import axios from 'axios'
+import NavbarAdmin from '@/components/NavbarAdmin.vue'
+
 export default {
   components: { NavbarAdmin },
   data() {
     return {
-      pembayaran: [
-        { id: 1, id_pemesanan: 101, tgl_bayar: '2024-12-29', jml_bayar: 150000, metode: 'TF', status: 'belum lunas' },
-        { id: 2, id_pemesanan: 102, tgl_bayar: '2024-12-30', jml_bayar: 200000, metode: 'Qris', status: 'lunas' }
-      ]
-    };
+      pembayaran: []
+    }
+  },
+  mounted() {
+    axios.get('http://localhost/2/backend/index.php/api/pembayaran')
+      .then(res => {
+        this.pembayaran = res.data
+      })
+      .catch(err => {
+        console.error('Gagal mengambil data pembayaran:', err)
+      })
   },
   methods: {
     ubahStatus(id, status) {
-      const p = this.pembayaran.find(x => x.id === id);
-      if (p) p.status = status;
+      const p = this.pembayaran.find(x => x.id === id)
+      if (p) p.status = status
+    },
+    getGambarUrl(filename) {
+      if (!filename) return ''
+      return `http://localhost/2/backend/assets/vue/img/bukti_bayar/${filename}`
     }
   }
-};
+}
 </script>
+
 <style scoped>
 
 h1 {
@@ -91,6 +109,14 @@ button {
 
 button:hover {
   background-color: #2980b9;
+}
+.bukti-img {
+  width: 100%;
+  max-height: 150px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
 }
 
 </style>

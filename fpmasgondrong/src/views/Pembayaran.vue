@@ -44,18 +44,34 @@ export default {
       id_pemesanan: null
     };
   },
-  created() {
-    const today = new Date();
-    this.formattedDate = today.toISOString().split('T')[0];
+created() {
+  const today = new Date();
+  this.formattedDate = today.toISOString().split('T')[0];
 
-    // Ambil id_pemesanan dari route query
-    this.id_pemesanan = this.$route.query.id_pemesanan;
+  this.id_pemesanan = this.$route.query.id_pemesanan;
 
-    if (!this.id_pemesanan) {
-      alert('ID Pemesanan tidak ditemukan. Silakan ulangi proses pemesanan.');
-      this.$router.push('/');
-    }
-  },
+  if (!this.id_pemesanan) {
+    alert('ID Pemesanan tidak ditemukan. Silakan ulangi proses pemesanan.');
+    this.$router.push('/');
+    return;
+  }
+
+  // Ambil total_harga dari database berdasarkan id_pemesanan
+  fetch(`http://localhost/2/backend/index.php/api/pemesanan/${this.id_pemesanan}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.status && data.data) {
+        this.jml_bayar = parseInt(data.data.total_harga);
+      } else {
+        alert('Data pemesanan tidak ditemukan.');
+        this.$router.push('/');
+      }
+    })
+    .catch(err => {
+      console.error('Gagal mengambil data pemesanan:', err);
+      alert('Terjadi kesalahan saat mengambil data pemesanan.');
+    });
+},
   methods: {
     handleFileChange(e) {
       this.buktiFile = e.target.files[0];

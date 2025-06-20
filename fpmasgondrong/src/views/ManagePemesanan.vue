@@ -2,20 +2,45 @@
   <div>
     <NavbarAdmin />
     <h1>MANAGE PEMESANAN</h1>
-    <div class="card-container">
-      <div v-for="item in pemesanan" :key="item.id_pemesanan" class="card">
-        <p><strong>Nama:</strong> {{ item.nama_user }}</p>
-        <p><strong>Kendaraan:</strong> {{ item.nama_kendaraan }}</p>
-        <p><strong>Tanggal:</strong> {{ item.tgl_mulai }} - {{ item.tgl_selesai }}</p>
-        <p><strong>Status:</strong> {{ item.status }}</p>
- <select v-model="item.status" @change="updateStatus(item.id_pemesanan, item.status)">
-  <option value="diproses">Diproses</option>
-  <option value="selesai">Selesai</option>
-  <option value="batal">Batal</option>
-</select>
 
-      </div>
+    <!-- Filter Status -->
+    <div class="filter-container">
+      <button
+        v-for="status in ['semua', 'diproses', 'selesai', 'batal']"
+        :key="status"
+        :class="['filter-button', filterStatus === status ? 'active' : '']"
+        @click="filterStatus = status"
+      >
+        {{ status.toUpperCase() }}
+      </button>
     </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nama User</th>
+          <th>Kendaraan</th>
+          <th>Tanggal</th>
+          <th>Status</th>
+          <th>Ubah Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in pemesananTersaring" :key="item.id_pemesanan">
+          <td>{{ item.nama_user }}</td>
+          <td>{{ item.nama_kendaraan }}</td>
+          <td>{{ item.tgl_mulai }} - {{ item.tgl_selesai }}</td>
+          <td>{{ item.status }}</td>
+          <td>
+            <select v-model="item.status" @change="updateStatus(item.id_pemesanan, item.status)">
+              <option value="diproses">Diproses</option>
+              <option value="selesai">Selesai</option>
+              <option value="batal">Batal</option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
@@ -24,12 +49,19 @@ import axios from 'axios';
 import NavbarAdmin from '@/components/NavbarAdmin.vue';
 
 export default {
-  components: {
-    NavbarAdmin
-  },
+  components: { NavbarAdmin },
   data() {
     return {
-      pemesanan: []
+      pemesanan: [],
+      filterStatus: 'semua'
+    };
+  },
+  computed: {
+    pemesananTersaring() {
+      if (this.filterStatus === 'semua') {
+        return this.pemesanan;
+      }
+      return this.pemesanan.filter(p => p.status === this.filterStatus);
     }
   },
   mounted() {
@@ -42,21 +74,18 @@ export default {
       });
   },
   methods: {
-updateStatus(id_pemesanan, status) {
-  axios.post("http://localhost/2/backend/index.php/pemesanan/update_status", {
-    id_pemesanan,
-    status
-  }).then(() => {
-    alert('Status diperbarui!');
-  }).catch(err => {
-    console.error('Gagal memperbarui status:', err);
-  });
-}
-
-
-
+    updateStatus(id_pemesanan, status) {
+      axios.post("http://localhost/2/backend/index.php/pemesanan/update_status", {
+        id_pemesanan,
+        status
+      }).then(() => {
+        alert('Status diperbarui!');
+      }).catch(err => {
+        console.error('Gagal memperbarui status:', err);
+      });
+    }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -64,25 +93,70 @@ h1 {
   text-align: center;
   font-size: 32px;
   color: #2c3e50;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   background-color: #f7f9fb;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.card-container {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 20px;
-  padding: 0 20px 20px;
+.filter-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
-.card {
-  background-color: #ffffff;
+.filter-button {
+  background-color: #ecf0f1;
+  color: #2c3e50;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.filter-button:hover {
+  background-color: #dcdde1;
+}
+
+.filter-button.active {
+  background-color: #3498db;
+  color: white;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+th {
+  background-color: #3498db;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tr:hover {
+  background-color: #f1f1f1;
+}
+
+select {
+  padding: 6px 12px;
+  border-radius: 5px;
   border: 1px solid #ccc;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 </style>
