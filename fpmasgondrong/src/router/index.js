@@ -46,7 +46,13 @@ const routes = [
   { path: '/admin/pemesanan', name: 'ManagePemesanan', component: ManagePemesanan, meta: { showHeader: false } },
   { path: '/admin/pembayaran', name: 'ManagePembayaran', component: ManagePembayaran, meta: { showHeader: false } },
   { path: '/admin/kendaraan', name: 'ManageKendaraan', component: ManageKendaraan, meta: { showHeader: false } },
-  { path: '/admin/pengguna', name: 'ManagePengguna', component: ManagePengguna, meta: { showHeader: false } }
+  { path: '/admin/pengguna', name: 'ManagePengguna', component: ManagePengguna, meta: { showHeader: false } },
+  {path: '/admin/tambah-kendaraan',name: 'TambahKendaraan',component: () => import('@/views/TambahKendaraan.vue')},
+  {path: '/admin/edit-kendaraan/:id',name: 'EditKendaraan', component: () => import('@/views/EditKendaraan.vue')},
+  {path: '/admin/manage-kendaraan',name: 'ManageKendaraan', component: () => import('@/views/ManageKendaraan.vue')}
+  
+  
+  
 ]
 
 

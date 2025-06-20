@@ -14,8 +14,8 @@
         <p><strong>Status:</strong> {{ p.status }}</p>
 
         <div class="btn-group">
-          <button @click="ubahStatus(p.id, 'lunas')">Set Lunas</button>
-          <button @click="ubahStatus(p.id, 'belum lunas')">Set Belum Lunas</button>
+<button @click="ubahStatus(p.id_pembayaran, 'lunas')">Set Lunas</button>
+<button @click="ubahStatus(p.id_pembayaran, 'belum lunas')">Set Belum Lunas</button>
         </div>
       </div>
     </div>
@@ -35,20 +35,42 @@ export default {
       pembayaran: []
     }
   },
-  mounted() {
-    axios.get('http://localhost/2/backend/index.php/api/pembayaran')
-      .then(res => {
-        this.pembayaran = res.data
-      })
-      .catch(err => {
-        console.error('Gagal mengambil data pembayaran:', err)
-      })
-  },
+mounted() {
+  axios.get('http://localhost/2/backend/index.php/api/pembayaran')
+    .then(res => {
+      console.log(res.data); // 👈 Tambahkan ini
+      this.pembayaran = res.data;
+    })
+    .catch(err => {
+      console.error('Gagal mengambil data pembayaran:', err);
+    });
+},
   methods: {
-    ubahStatus(id, status) {
-      const p = this.pembayaran.find(x => x.id === id)
-      if (p) p.status = status
-    },
+ubahStatus(id_pembayaran, status) {
+  axios.post('http://localhost/2/backend/index.php/api/pembayaran/update_status', {
+    id_pembayaran,
+    status
+  })
+  .then(res => {
+    if (res.data.success) {
+      // ✅ Update status di data lokal agar langsung muncul di tampilan
+      const pembayaran = this.pembayaran.find(p => p.id_pembayaran === id_pembayaran);
+      if (pembayaran) {
+        pembayaran.status = status;
+      }
+
+      alert('Status berhasil diperbarui!');
+    } else {
+      alert('Gagal: ' + res.data.message);
+    }
+  })
+  .catch(err => {
+    console.error('Gagal mengirim request:', err);
+    alert('Terjadi kesalahan jaringan.');
+  });
+}
+
+,
     getGambarUrl(filename) {
       if (!filename) return ''
       return `http://localhost/2/backend/assets/vue/img/bukti_bayar/${filename}`
