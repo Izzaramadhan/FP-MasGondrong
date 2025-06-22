@@ -48,10 +48,12 @@ export default {
       this.$router.push('/')
     },
     syncLoginState() {
-      // Bisa pakai salah satu, keduanya sama-sama bisa
-      this.isLoggedIn = localStorage.getItem('userLoggedIn') === 'true'
-      // atau: this.isLoggedIn = !!localStorage.getItem('user')
-    }
+  const userLoggedIn = localStorage.getItem('userLoggedIn') === 'true'
+  const userData = localStorage.getItem('user')
+
+  this.isLoggedIn = userLoggedIn && userData !== null
+}
+
   }
 }
 
