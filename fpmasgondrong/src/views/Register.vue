@@ -63,7 +63,7 @@ handleRegister() {
 
   console.log("Data dikirim ke backend:", this.form); // ✅ DEBUG DI SINI
 
-  fetch("http://localhost/1/backend/index.php/auth/register", {
+  fetch("http://localhost/2/backend/index.php/auth/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(this.form)
