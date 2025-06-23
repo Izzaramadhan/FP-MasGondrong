@@ -17,7 +17,7 @@
         <div class="col-md-4 mb-3">
           <i class="bi bi-geo-alt-fill fs-3 text-success"></i>
           <h6 class="mt-2">Alamat</h6>
-          <p class="small m-0">Jl. Sudirman No.123, Jakarta</p>
+          <p class="small m-0"> Karangsari, Wedomartani, Kec. Ngemplak, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55584</p>
         </div>
       </div>
     </div>
