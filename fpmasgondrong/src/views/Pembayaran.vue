@@ -17,12 +17,25 @@
         <select v-model="metode" id="metode" class="form-select" required>
           <option value="">-- Pilih Metode --</option>
           <option value="TF">Transfer</option>
-          <option value="Qris">QRIS</option>
           <option value="Tunai">Tunai</option>
         </select>
       </div>
 
-      <div class="mb-3">
+      <!-- Card muncul jika metode Transfer -->
+      <div v-if="showRekeningCard" class="qr-popup">
+        <div class="qr-card">
+          <h5 class="text-center">Transfer ke Salah Satu Rekening Berikut</h5>
+          <ul class="text-start">
+            <li><strong>BNI:</strong> 1234567890 a.n. Mas Gondrong Rent</li>
+            <li><strong>BRI:</strong> 0987654321 a.n. Mas Gondrong Rent</li>
+            <li><strong>Mandiri:</strong> 1122334455 a.n. Mas Gondrong Rent</li>
+          </ul>
+          <p class="text-center text-muted mt-2">Setelah transfer, upload bukti pembayaran di bawah.</p>
+        </div>
+      </div>
+
+      <!-- Upload hanya muncul jika bukan Tunai -->
+      <div class="mb-3 mt-3" v-if="metode !== 'Tunai'">
         <label for="bukti" class="form-label">Upload Bukti Pembayaran</label>
         <input type="file" @change="handleFileChange" class="form-control" accept="image/*,.pdf" required />
       </div>
@@ -41,53 +54,64 @@ export default {
       formattedDate: '',
       jml_bayar: 125000,
       buktiFile: null,
-      id_pemesanan: null
+      id_pemesanan: null,
+      showRekeningCard: false
     };
   },
-created() {
-  const today = new Date();
-  this.formattedDate = today.toISOString().split('T')[0];
+  created() {
+    const today = new Date();
+    this.formattedDate = today.toISOString().split('T')[0];
 
-  this.id_pemesanan = this.$route.query.id_pemesanan;
+    this.id_pemesanan = this.$route.query.id_pemesanan;
 
-  if (!this.id_pemesanan) {
-    alert('ID Pemesanan tidak ditemukan. Silakan ulangi proses pemesanan.');
-    this.$router.push('/');
-    return;
-  }
+    if (!this.id_pemesanan) {
+      alert('ID Pemesanan tidak ditemukan. Silakan ulangi proses pemesanan.');
+      this.$router.push('/');
+      return;
+    }
 
-  // Ambil total_harga dari database berdasarkan id_pemesanan
-  fetch(`http://localhost/2/backend/index.php/api/pemesanan/${this.id_pemesanan}`)
-    .then(res => res.json())
-    .then(data => {
-      if (data.status && data.data) {
-        this.jml_bayar = parseInt(data.data.total_harga);
-      } else {
-        alert('Data pemesanan tidak ditemukan.');
-        this.$router.push('/');
-      }
-    })
-    .catch(err => {
-      console.error('Gagal mengambil data pemesanan:', err);
-      alert('Terjadi kesalahan saat mengambil data pemesanan.');
-    });
-},
+    fetch(`http://localhost/2/backend/index.php/api/pemesanan/${this.id_pemesanan}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.status && data.data) {
+          this.jml_bayar = parseInt(data.data.total_harga);
+        } else {
+          alert('Data pemesanan tidak ditemukan.');
+          this.$router.push('/');
+        }
+      })
+      .catch(err => {
+        console.error('Gagal mengambil data pemesanan:', err);
+        alert('Terjadi kesalahan saat mengambil data pemesanan.');
+      });
+  },
+  watch: {
+    metode(newVal) {
+      this.showRekeningCard = newVal === 'TF';
+    }
+  },
   methods: {
     handleFileChange(e) {
       this.buktiFile = e.target.files[0];
     },
     async handlePayment() {
-      if (!this.metode || !this.buktiFile) {
+      if (!this.metode || (this.metode !== 'Tunai' && !this.buktiFile)) {
         alert('Lengkapi semua data!');
         return;
       }
 
-      const formData = new FormData();
-      formData.append('id_pemesanan', this.id_pemesanan);
-      formData.append('tgl_bayar', this.formattedDate);
-      formData.append('metode', this.metode);
-      formData.append('jml_bayar', this.jml_bayar);
-      formData.append('bukti_bayar', this.buktiFile);
+const formData = new FormData();
+formData.append('id_pemesanan', this.id_pemesanan);
+formData.append('tgl_bayar', this.formattedDate);
+formData.append('metode', this.metode);
+formData.append('jml_bayar', this.jml_bayar);
+
+if (this.metode !== 'Tunai' && this.buktiFile) {
+  formData.append('bukti_bayar', this.buktiFile);
+} else if (this.metode !== 'Tunai') {
+  alert('File bukti belum dipilih!');
+  return;
+}
 
       try {
         const res = await fetch('http://localhost/2/backend/index.php/api/pembayaran/simpan', {
@@ -118,7 +142,6 @@ created() {
 };
 </script>
 
-
 <style scoped>
 .pembayaran-wrapper {
   max-width: 500px;
@@ -131,5 +154,24 @@ created() {
   font-weight: bold;
   font-size: 1.2rem;
   margin-bottom: 15px;
+}
+.qr-popup {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+}
+.qr-card {
+  background: #ffffff;
+  padding: 20px 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  text-align: center;
+  max-width: 350px;
+  width: 100%;
+}
+.qr-card ul {
+  padding-left: 1rem;
+  text-align: left;
+  list-style-type: disc;
 }
 </style>

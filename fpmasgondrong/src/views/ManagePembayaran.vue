@@ -5,7 +5,7 @@
     <div class="grid-container">
       <div v-for="p in pembayaran" :key="p.id" class="card">
         <!-- Tambahkan gambar bukti bayar -->
-        <img :src="getGambarUrl(p.bukti_bayar)" alt="Bukti Pembayaran" class="bukti-img" />
+    <img :src="getGambarUrl(p.bukti_bayar, p.metode)" alt="Bukti Pembayaran" class="bukti-img" />
 
         <p><strong>ID Pemesanan:</strong> {{ p.id_pemesanan }}</p>
         <p><strong>Tanggal Bayar:</strong> {{ p.tgl_bayar }}</p>
@@ -71,10 +71,17 @@ ubahStatus(id_pembayaran, status) {
 }
 
 ,
-    getGambarUrl(filename) {
-      if (!filename) return ''
-      return `http://localhost/2/backend/assets/vue/img/bukti_bayar/${filename}`
+getGambarUrl(filename, metode) {
+  if (!filename) {
+    // Jika metode tunai & tidak ada file
+    if (metode === 'Tunai') {
+      return 'http://localhost/2/backend/assets/vue/img/bukti_bayar/tunai.png';
     }
+    return ''; // tidak tampilkan gambar jika metode lain tapi file kosong
+  }
+  return `http://localhost/2/backend/assets/vue/img/bukti_bayar/${filename}`;
+}
+
   }
 }
 </script>
