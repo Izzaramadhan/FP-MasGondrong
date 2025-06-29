@@ -7,7 +7,7 @@ class PemesananModel extends CI_Model {
         $this->db->from('pemesanan p');
         $this->db->join('kendaraan k', 'k.id_kendaraan = p.id_kendaraan');
         $this->db->where('p.id_user', $id_user);
-        return $this->db->get()->result();
+        return $this->db->get()->result_array();  
     }
     public function getById($id)
 {
@@ -23,8 +23,6 @@ class PemesananModel extends CI_Model {
     $this->db->where('p.id_user', $id_user);
     return $this->db->get()->result();
 }
-
-    
 
         public function insert($data) {
             return $this->db->insert('pemesanan', [
