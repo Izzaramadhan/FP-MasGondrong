@@ -4,16 +4,17 @@
       <span style="color: #1E73BE;">RIWAYAT PEMESANAN</span>
     </h2>
 
-    <div v-if="pemesanan.length === 0" class="text-center text-muted">
-      Belum ada riwayat pemesanan.
-    </div>
+ <div v-if="pemesanan.length === 0" class="text-center text-muted">
+  Belum ada riwayat pemesanan.
+</div>
 
-    <div class="row">
+<div v-else class="row">
   <div
     v-for="item in pemesanan"
     :key="item.id_pemesanan"
     class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4"
   >
+
     <div class="card h-100 p-3">
       <p><strong>ID Pemesanan:</strong> {{ item.id_pemesanan }}</p>
       <p><strong>Tanggal Mulai:</strong> {{ formatTanggal(item.tgl_mulai) }}</p>
@@ -48,7 +49,8 @@ export default {
   },
   methods: {
 async fetchPemesanan() {
-  const id_user = localStorage.getItem('id_user')
+  const user = JSON.parse(localStorage.getItem('user'))
+  const id_user = user ? user.id_user : null
   console.log("Dari localStorage: ", id_user)
 
   if (!id_user) {
@@ -66,6 +68,7 @@ async fetchPemesanan() {
     console.error('Gagal mengambil data pemesanan:', err)
   }
 }
+
 ,
     formatTanggal(tanggal) {
       return new Date(tanggal).toLocaleDateString('id-ID', {
@@ -80,7 +83,8 @@ async fetchPemesanan() {
     }
   },
   mounted() {
-    this.fetchPemesanan()
+    this.fetchPemesanan();
+    console.log("mounted: siap ambil data");
   }
 }
 </script>
