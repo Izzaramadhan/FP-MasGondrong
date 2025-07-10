@@ -25,9 +25,16 @@ export default {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  width: 100%;
 }
 
+
 .main-content {
-  flex: 1; /* Agar konten isi ruang di atas footer */
+  flex: 1;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
+
+
 </style>

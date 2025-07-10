@@ -1,5 +1,5 @@
 <template>
-  <NavbarAdmin />
+  <AdminLayout>
   <div class="form-container">
     <h1>Tambah Kendaraan</h1>
 
@@ -26,14 +26,16 @@
       <button type="submit">Simpan</button>
     </form>
   </div>
+
+  </AdminLayout>
 </template>
 
 <script>
-import NavbarAdmin from '@/components/NavbarAdmin.vue'
+import AdminLayout from '@/components/AdminLayout.vue';
 import axios from 'axios'
 
 export default {
-  components: { NavbarAdmin },
+  components: { AdminLayout },
   data() {
     return {
       tipe: '',

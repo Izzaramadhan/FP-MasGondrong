@@ -1,64 +1,132 @@
 <template>
-  <div>
-    <NavbarAdmin />
-    <h1>MANAGE PEMESANAN</h1>
+  <AdminLayout>
+    <template #header></template>
 
-    <!-- Filter Status -->
-    <div class="filter-container">
+    <h1 class="text-center my-4 judul-kelola">Kelola Pemesanan</h1>
+
+
+<!-- Chart -->
+<div class="container row mx-auto mb-4">
+  <div class="col-md-6 mb-4">
+    <h5 class="text-center">Jumlah Pemesanan per Hari</h5>
+    <div style="height: 250px;"> <!-- Ukuran kecil -->
+      <Line v-if="pemesanan.length > 0" :data="lineChartData" :options="chartOptions" />
+    </div>
+  </div>
+  <div class="col-md-6 mb-4">
+    <h5 class="text-center">Status Pemesanan</h5>
+    <div style="height: 250px;"> <!-- Ukuran kecil -->
+      <Doughnut v-if="pemesanan.length > 0" :data="doughnutData" :options="chartOptions" />
+    </div>
+  </div>
+</div>
+
+    <!-- Filter -->
+    <div class="container text-center mb-3">
       <button
         v-for="status in ['semua', 'diproses', 'selesai', 'batal']"
         :key="status"
-        :class="['filter-button', filterStatus === status ? 'active' : '']"
+        :class="['btn', 'me-2', filterStatus === status ? 'btn-primary' : 'btn-outline-primary']"
         @click="filterStatus = status"
       >
         {{ status.toUpperCase() }}
       </button>
     </div>
 
-<div class="tabel-container">
-  <table class="styled-table">
-    <thead>
-      <tr>
-        <th>Nama User</th>
-        <th>Kendaraan</th>
-        <th>Tanggal</th>
-        <th>Status</th>
-        <th>Ubah Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="item in pemesananTersaring" :key="item.id_pemesanan">
-        <td>{{ item.nama_user }}</td>
-        <td>{{ item.nama_kendaraan }}</td>
-        <td>{{ item.tgl_mulai }} - {{ item.tgl_selesai }}</td>
-        <td>{{ item.status }}</td>
-        <td>
-          <select v-model="item.status" @change="updateStatus(item.id_pemesanan, item.status)">
-            <option value="diproses">Diproses</option>
-            <option value="selesai">Selesai</option>
-            <option value="batal">Batal</option>
-          </select>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-
-
-  </div>
+    <!-- Tabel -->
+    <div class="container">
+      <div class="card shadow-sm w-100">
+        <div class="card-header border-bottom-0">
+          <h3 class="card-title"><i class="fas fa-list me-2"></i>Daftar Pemesanan</h3>
+        </div>
+        <div class="card-body px-3 table-responsive">
+          <table class="table table-hover align-middle mb-0 w-100">
+            <thead class="bg-light text-secondary text-uppercase small">
+              <tr>
+                <th>Nama User</th>
+                <th>Kendaraan</th>
+                <th>Tanggal</th>
+                <th>Status</th>
+                <th>Ubah Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in pemesananTersaring" :key="item.id_pemesanan">
+                <td>{{ item.nama_user }}</td>
+                <td>{{ item.nama_kendaraan }}</td>
+                <td>{{ item.tgl_mulai }} - {{ item.tgl_selesai }}</td>
+                <td>
+                  <span class="badge rounded-pill"
+                        :class="{
+                          'bg-warning': item.status === 'diproses',
+                          'bg-success': item.status === 'selesai',
+                          'bg-danger': item.status === 'batal'
+                        }">
+                    {{ item.status }}
+                  </span>
+                </td>
+                <td>
+                  <select class="form-select form-select-sm"
+                          v-model="item.status"
+                          @change="updateStatus(item.id_pemesanan, item.status)">
+                    <option value="diproses">Diproses</option>
+                    <option value="selesai">Selesai</option>
+                    <option value="batal">Batal</option>
+                  </select>
+                </td>
+              </tr>
+              <tr v-if="pemesananTersaring.length === 0">
+                <td colspan="5" class="text-center text-muted py-3">Data pemesanan tidak tersedia</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </AdminLayout>
 </template>
 
 <script>
 import axios from 'axios';
-import NavbarAdmin from '@/components/NavbarAdmin.vue';
+import AdminLayout from '@/components/AdminLayout.vue';
+import { Line, Doughnut } from 'vue-chartjs';
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  LineElement,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  ArcElement
+} from 'chart.js';
+
+ChartJS.register(
+  Title,
+  Tooltip,
+  Legend,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  ArcElement
+);
 
 export default {
-  components: { NavbarAdmin },
+  components: {
+    AdminLayout,
+    Line,
+    Doughnut
+  },
   data() {
     return {
       pemesanan: [],
-      filterStatus: 'semua'
+      filterStatus: 'semua',
+      chartOptions: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
     };
   },
   computed: {
@@ -67,6 +135,39 @@ export default {
         return this.pemesanan;
       }
       return this.pemesanan.filter(p => p.status === this.filterStatus);
+    },
+    lineChartData() {
+      const countPerDate = {};
+      this.pemesanan.forEach(item => {
+        const date = item.tgl_mulai;
+        countPerDate[date] = (countPerDate[date] || 0) + 1;
+      });
+      return {
+        labels: Object.keys(countPerDate),
+        datasets: [{
+          label: 'Pemesanan per Tanggal',
+          data: Object.values(countPerDate),
+          borderColor: '#3498db',
+          backgroundColor: '#3498db',
+          tension: 0.3,
+          fill: false
+        }]
+      };
+    },
+    doughnutData() {
+      const count = { diproses: 0, selesai: 0, batal: 0 };
+      this.pemesanan.forEach(item => {
+        if (count[item.status] !== undefined) {
+          count[item.status]++;
+        }
+      });
+      return {
+        labels: ['Diproses', 'Selesai', 'Batal'],
+        datasets: [{
+          data: [count.diproses, count.selesai, count.batal],
+          backgroundColor: ['#f1c40f', '#2ecc71', '#e74c3c']
+        }]
+      };
     }
   },
   mounted() {
@@ -80,107 +181,36 @@ export default {
   },
   methods: {
     updateStatus(id_pemesanan, status) {
- axios.post("http://localhost/2/backend/index.php/api/pemesanan/update_status", {
-  id_pemesanan,
-  status
-}).then(() => {
-    alert('Status diperbarui!');
-  }).catch(err => {
-    console.error('Gagal memperbarui status:', err);
-  });
-}
-
+      axios.post("http://localhost/2/backend/index.php/api/pemesanan/update_status", {
+        id_pemesanan,
+        status
+      }).then(() => {
+        alert('Status diperbarui!');
+      }).catch(err => {
+        console.error('Gagal memperbarui status:', err);
+      });
+    }
   }
 };
 </script>
 
 <style scoped>
-h1 {
-  text-align: center;
-  font-size: 32px;
-  color: #2c3e50;
+.card {
+  max-width: 1500px;
   margin-bottom: 20px;
-  background-color: #f7f9fb;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
-
-.filter-container {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-
-.filter-button {
-  background-color: #ecf0f1;
-  color: #2c3e50;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.judul-kelola {
+  font-size: 2.5rem;
   font-weight: bold;
-  text-transform: uppercase;
 }
-
-.filter-button:hover {
-  background-color: #dcdde1;
+.table td, .table th {
+  vertical-align: middle;
 }
-
-.filter-button.active {
-  background-color: #3498db;
-  color: white;
+.card-title i {
+  margin-right: 6px;
 }
-
-/* Bungkus tabel agar body scrollable */
-.tabel-container {
-  max-height: 400px;
-  overflow-y: auto;
-  border: 1px solid #ccc;
-  margin-top: 20px;
+.badge {
+  font-size: 0.8rem;
+  padding: 0.4em 0.6em;
 }
-
-/* Table tetap rapi */
-.styled-table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-}
-
-/* Header sticky */
-.styled-table thead th {
-  position: sticky;
-  top: 0;
-  background-color: #3498db;
-  color: white;
-  z-index: 2;
-  padding: 10px;
-  border: 1px solid #ddd;
-}
-
-/* Body tabel */
-.styled-table tbody td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: center;
-  background-color: white;
-}
-
-.styled-table tbody tr:nth-child(even) td {
-  background-color: #f9f9f9;
-}
-
-.styled-table tbody tr:hover td {
-  background-color: #f1f1f1;
-}
-
-select {
-  padding: 6px 12px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-
 </style>

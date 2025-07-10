@@ -1,36 +1,57 @@
 <template>
-  <NavbarAdmin />
-  <div>
-    <h1>MANAGE PENGGUNA</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Nama</th>
-          <th>Email</th>
-          <th>No HP</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="u in pengguna" :key="u.id_user">
-          <td>{{ u.nama }}</td>
-          <td>{{ u.email }}</td>
-          <td>{{ u.no_hp }}</td>
-          <td>
-            <button @click="hapusPengguna(u.id_user)">Hapus</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <AdminLayout>
+    <template #header></template>
+    <h1 class="text-center my-4 judul-kelola">Kelola Pengguna</h1>
+<div class="row mb-4 text-center">
+  <div class="col-md-3" v-for="item in summaryCards" :key="item.title">
+    <div class="card shadow-sm p-3">
+      <h6>{{ item.title }}</h6>
+      <h4 class="text-primary">{{ item.value }}</h4>
+    </div>
   </div>
+</div>
+
+    <div class="container">
+      <div class="card shadow-sm">
+        <div class="card-body table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="bg-light text-secondary text-uppercase small">
+              <tr>
+                <th>Nama</th>
+                <th>Email</th>
+                <th>No HP</th>
+                <th class="text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="u in pengguna" :key="u.id_user">
+                <td>{{ u.nama }}</td>
+                <td>{{ u.email }}</td>
+                <td>{{ u.no_hp }}</td>
+                <td class="text-center">
+                  <button class="btn btn-sm btn-outline-danger" @click="hapusPengguna(u.id_user)">
+                    <i class="fas fa-trash"></i> Hapus
+                  </button>
+                </td>
+              </tr>
+              <tr v-if="pengguna.length === 0">
+                <td colspan="4" class="text-center text-muted py-3">Data pengguna tidak tersedia</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </AdminLayout>
 </template>
+
 
 <script>
 import axios from 'axios';
-import NavbarAdmin from '@/components/NavbarAdmin.vue';
+import AdminLayout from '@/components/AdminLayout.vue';
 
 export default {
-  components: { NavbarAdmin },
+  components: { AdminLayout },
   data() {
     return {
       pengguna: []
@@ -116,5 +137,9 @@ button {
 
 button:hover {
   background-color: #2980b9;
+}
+.card {
+  max-width: 1500px;
+  margin-bottom: 20px;
 }
 </style>

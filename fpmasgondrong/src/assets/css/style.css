@@ -599,11 +599,15 @@ html, body {
 }
 
 .main-content {
-     flex: 1;
-      padding-top: 80px; /* Jarak dari navbar */
-      padding-bottom: 40px; /* Jarak dari footer */
+  flex: 1;
+  padding-top: 80px;
+  padding-bottom: 40px;
 
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
 }
+
 
 .content {
   flex: 1;
