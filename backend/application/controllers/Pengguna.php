@@ -13,6 +13,7 @@ class Pengguna extends CI_Controller {
         $query = $this->db->get('user'); // asumsi tabel: user
         echo json_encode($query->result());
     }
+    
 
     // Hapus pengguna berdasarkan ID
     public function delete($id) {
