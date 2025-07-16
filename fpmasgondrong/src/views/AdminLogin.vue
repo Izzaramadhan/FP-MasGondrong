@@ -35,8 +35,7 @@ export default {
   methods: {
     login() {
       if (this.username === 'admin' && this.password === 'admin123') {
-        localStorage.setItem('isAdmin', true)
-        localStorage.setItem('userLoggedIn', 'true')
+        localStorage.setItem('isLoggedIn', 'true') // Ini yang dibaca oleh AdminLayout
         window.dispatchEvent(new Event('user-login-changed'))
         this.$router.push('/admin/dashboard')
       } else {

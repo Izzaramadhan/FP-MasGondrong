@@ -1,10 +1,7 @@
 <template>
-
   <div class="wrapper layout-fixed layout-navbar-fixed sidebar-mini">
-
     <!-- Navbar -->
-    <nav class="main-header navbar navbar-expand custom-navbar">
-
+    <nav class="main-header navbar navbar-expand custom-navbar fixed-top">
       <!-- Left navbar links -->
       <ul class="navbar-nav">
         <li class="nav-item">
@@ -18,18 +15,21 @@
       </ul>
 
       <!-- Right navbar -->
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <button v-if="isLoggedIn" @click="logout" class="btn btn-sm btn-outline-danger">
-            <i class="fas fa-sign-out-alt"></i> Logout
-          </button>
-        </li>
-      </ul>
+      <ul class="navbar-nav ml-auto logout-nav">
+  <li class="nav-item">
+    <button
+      v-if="isLoggedIn"
+      @click="logout"
+      class="btn btn-sm btn-outline-danger logout-btn">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+  </li>
+</ul>
+
     </nav>
 
     <!-- Sidebar -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
-      <!-- Brand Logo -->
       <a href="#" class="brand-link">
         <img
           src="@/assets/images/navbar/logobaru2.png"
@@ -40,16 +40,15 @@
         <span class="brand-text font-weight-light">Admin MasGondrong</span>
       </a>
 
-      <!-- Sidebar -->
       <div class="sidebar">
-        <!-- Sidebar Menu -->
         <nav class="mt-2">
-          <ul
-            class="nav nav-pills nav-sidebar flex-column"
-            data-widget="treeview"
-            role="menu"
-            data-accordion="false"
-          >
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <li class="nav-item">
+              <router-link to="/admin/dashboard" class="nav-link" exact>
+                <i class="nav-icon fas fa-car"></i>
+                <p>Dashboard</p>
+              </router-link>
+            </li>
             <li class="nav-item">
               <router-link to="/admin/kendaraan" class="nav-link" exact>
                 <i class="nav-icon fas fa-car"></i>
@@ -79,13 +78,13 @@
       </div>
     </aside>
 
-  <!-- Main content -->
-  <section class="content">
-    <div class="container-fluid">
-      <slot />
-    </div>
-  </section>
-</div>
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <slot />
+      </div>
+    </section>
+  </div>
 </template>
 
 <script>
@@ -93,7 +92,7 @@ export default {
   props: {
     navbarColor: {
       type: String,
-      default: '#4B0082' // Default warna ungu tua (Indigo)
+      default: '#4B0082'
     }
   },
   computed: {
@@ -104,11 +103,10 @@ export default {
   methods: {
     logout() {
       localStorage.removeItem('isLoggedIn');
-      this.$router.push('/login');
+      this.$router.push('/adminlogin');
     }
   }
 };
-
 </script>
 
 <style scoped>
@@ -116,27 +114,40 @@ export default {
   width: 35px;
   height: 35px;
 }
+
 .custom-navbar {
   background-color: #53c9f5;
   color: white;
-  height: 70px; /* default sekitar 56px, jadi lebih tinggi */
-  font-size: 1.4rem; /* perbesar font di navbar */
+  height: 70px;
+  font-size: 1.4rem;
   display: flex;
-  align-items: center; /* pastikan isi vertikal tengah */
+  align-items: center;
+  z-index: 1040;
 }
 
 .custom-navbar .nav-link {
   color: white;
   font-size: 1.4rem;
-
 }
 
 .custom-navbar .btn {
   font-size: 1rem;
 }
+
+/* Tombol logout digeser ke kiri sedikit */
+.logout-nav {
+  margin-right: 275px !important; /* geser seluruh ul lebih ke kiri */
+}
+
+.logout-btn {
+  z-index: 1050;
+  position: relative;
+}
+
+/* Sidebar */
 .sidebar .nav-link p,
 .sidebar .nav-link i {
-  font-size: 1.05rem; /* Teks di sidebar */
+  font-size: 1.05rem;
 }
 
 .sidebar .nav-link {
@@ -147,7 +158,7 @@ body {
   margin: 0 !important;
   padding: 0 !important;
 }
-/* Pastikan wrapper tidak menyebabkan overflow horizontal */
+
 .wrapper {
   width: 100%;
   max-width: 100vw;
@@ -156,31 +167,25 @@ body {
   flex-direction: column;
 }
 
-/* Tambahkan padding kiri agar konten tidak tertutup sidebar */
 .content-wrapper {
   padding-top: 50px;
-  padding-left: 200px;   /* Tambahkan ini */
-  padding-right: 20px;  /* Tambahkan ini */
+  padding-left: 200px;
+  padding-right: 20px;
   min-height: 100vh;
   box-sizing: border-box;
 }
 
-
-/* Agar layout header tetap responsif dan tidak "nabrak" */
 .content-header .d-flex {
   flex-wrap: wrap;
   gap: 1rem;
 }
 
-/* Jika tombol menghilang di layar kecil */
 @media (max-width: 576px) {
   .content-header .btn {
     width: 100%;
   }
 }
 
-
-/* Navbar tetap fixed, tapi jangan menutupi konten */
 .main-header {
   top: 0;
   position: fixed;
@@ -188,22 +193,16 @@ body {
   z-index: 1030;
 }
 
-
-
-/* Kontainer konten menyesuaikan ruang setelah sidebar */
 .content {
-  margin-left: 250px; /* offset untuk sidebar */
+  margin-left: 250px;
 }
 
-/* Atur kartu/tabel agar tidak overflow */
 .card {
   width: 100%;
   max-width: 100%;
   overflow-x: auto;
 }
 
-/* Ukuran kotak menu sidebar */
-/* Perbesar area klik dan tinggi tiap menu */
 .sidebar .nav-sidebar > .nav-item > .nav-link {
   padding-top: 16px !important;
   padding-bottom: 16px !important;
@@ -213,25 +212,21 @@ body {
   line-height: 1.6 !important;
 }
 
-/* Perbesar ikon menu */
 .sidebar .nav-sidebar > .nav-item > .nav-link i.nav-icon {
   font-size: 1.4rem !important;
   margin-right: 12px;
 }
 
-/* Perbesar teks menu */
 .sidebar .nav-sidebar > .nav-item > .nav-link p {
   font-size: 1.2rem !important;
   margin: 0;
 }
 
-/* Tambahan agar menu lebih "lega" dan enak dilihat */
 .sidebar .nav-sidebar > .nav-item {
   margin-bottom: 8px;
 }
+
 .content-header {
-  padding-left: 260px; /* supaya sejajar dengan konten */
+  padding-left: 260px;
 }
-
-
 </style>
