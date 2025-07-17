@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import api from '@/api';
+
 export default {
   name: 'EditProfilPage',
   data() {
@@ -38,11 +40,41 @@ export default {
       ]
     };
   },
+  mounted() {
+    const userId = localStorage.getItem('user_id');
+    if (!userId) return;
+
+    api.get(`pengguna/${userId}`)
+      .then(res => {
+        this.form = {
+          nama: res.data.nama,
+          email: res.data.email,
+          alamat: res.data.alamat,
+          no_hp: res.data.no_hp,
+          password: '' // kosongkan agar tidak langsung terganti
+        };
+      })
+      .catch(err => {
+        console.error('Gagal memuat data profil:', err);
+      });
+  },
   methods: {
     submitForm() {
-      // Di sini kamu bisa kirim data ke API atau hanya log untuk sementara
-      console.log('Data dikirim:', this.form);
-      alert('Data berhasil disimpan!');
+      const userId = localStorage.getItem('user_id');
+      if (!userId) {
+        alert('User tidak ditemukan.');
+        return;
+      }
+
+      api.post(`pengguna/${userId}`, this.form)
+        .then(() => {
+          alert('Profil berhasil diperbarui!');
+          this.$router.push('/profil');
+        })
+        .catch(error => {
+          console.error('Gagal update profil:', error);
+          alert('Terjadi kesalahan saat menyimpan.');
+        });
     }
   }
 };

@@ -21,13 +21,15 @@
       </p>
       <p class="text-center mt-3">
         Login sebagai Admin?
-        <router-link to="/adminlogin" class="text-decoration-none">Klik  Disini</router-link>
+        <router-link to="/adminlogin" class="text-decoration-none">Klik Disini</router-link>
       </p>
     </div>
   </div>
 </template>
 
 <script>
+import api from '@/api';
+
 export default {
   name: 'LoginPage',
   data() {
@@ -37,38 +39,33 @@ export default {
     };
   },
   methods: {
-handleLogin() {
-  fetch('http://localhost/2/backend/index.php/auth/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      email: this.email,
-      password: this.password
-    })
-  })
-  .then(res => res.json())
-  .then(data => {
-  if (data.status === 'success') {
-    alert('Login berhasil');
+    handleLogin() {
+      api.post('auth/login', {
+        email: this.email,
+        password: this.password
+      })
+      .then(res => {
+        const data = res.data;
+        if (data.status === 'success') {
+          alert('Login berhasil');
 
-    // Simpan ke localStorage
-localStorage.setItem('user', JSON.stringify(data.user));
-
-
-    // TAMBAHKAN BARIS INI:
-    localStorage.setItem('userLoggedIn', 'true');
-    window.dispatchEvent(new Event('user-login-changed')); // agar header tahu
-
-    this.$router.push('/');
-  }
-
-  });
-}
-
+          localStorage.setItem('user', JSON.stringify(data.user));
+          localStorage.setItem('userLoggedIn', 'true');
+          window.dispatchEvent(new Event('user-login-changed'));
+          this.$router.push('/');
+        } else {
+          alert('Email atau password salah!');
+        }
+      })
+      .catch(err => {
+        console.error('Login error:', err);
+        alert('Terjadi kesalahan saat login. Silakan coba lagi.');
+      });
+    }
   }
 };
 </script>
 
 <style scoped>
-
+/* tambahkan style jika perlu */
 </style>

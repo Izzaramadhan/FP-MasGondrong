@@ -3,25 +3,23 @@
     <template #header></template>
     <h1 class="text-center my-4 judul-kelola">Kelola Pembayaran</h1>
 
-    <!-- Grafik -->
     <div class="container mb-5">
       <div class="row">
         <div class="col-md-6 mb-4">
           <h5 class="text-center">Status Pembayaran</h5>
           <div class="chart-wrapper">
-          <DoughnutChart v-if="statusChartData" :data="statusChartData" :options="chartOptions" class="chart-container" />
-        </div>
+            <DoughnutChart v-if="statusChartData" :data="statusChartData" :options="chartOptions" class="chart-container" />
+          </div>
         </div>
         <div class="col-md-6 mb-4">
           <h5 class="text-center">Jumlah Pembayaran per Metode</h5>
           <div class="chart-wrapper mt-4">
-          <BarChart v-if="metodeChartData" :data="metodeChartData" :options="chartOptions" class="chart-container" />
-        </div>
+            <BarChart v-if="metodeChartData" :data="metodeChartData" :options="chartOptions" class="chart-container" />
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Tabel -->
     <div class="container">
       <div class="card shadow-sm w-100">
         <div class="card-header border-bottom-0">
@@ -47,7 +45,7 @@
                 </td>
                 <td>{{ p.id_pemesanan }}</td>
                 <td>{{ p.tgl_bayar }}</td>
-                <td>Rp {{ p.jml_bayar.toLocaleString('id-ID') }}</td>
+                <td>Rp {{ (p.jml_bayar || 0).toLocaleString('id-ID') }}</td>
                 <td>{{ p.metode }}</td>
                 <td>
                   <span class="badge rounded-pill"
@@ -78,19 +76,10 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '@/api';
 import AdminLayout from '@/components/AdminLayout.vue';
 import { Doughnut, Bar } from 'vue-chartjs';
-import {
-  Chart as ChartJS,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement,
-  BarElement,
-  CategoryScale,
-  LinearScale
-} from 'chart.js';
+import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, BarElement, CategoryScale, LinearScale } from 'chart.js';
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, BarElement, CategoryScale, LinearScale);
 
@@ -116,9 +105,10 @@ export default {
   },
   methods: {
     ambilDataPembayaran() {
-      axios.get('http://localhost/2/backend/index.php/api/pembayaran')
+      api.get('pembayaran')
         .then(res => {
-          this.pembayaran = res.data;
+          const hasil = Array.isArray(res.data) ? res.data : res.data.data;
+          this.pembayaran = hasil || [];
           this.generateCharts();
         })
         .catch(err => {
@@ -126,19 +116,13 @@ export default {
         });
     },
     ubahStatus(id_pembayaran, status) {
-      axios.post('http://localhost/2/backend/index.php/api/pembayaran/update_status', {
+      api.post('pembayaran/update_status', {
         id_pembayaran,
         status
       })
-      .then(res => {
-        if (res.data.success) {
-          const pembayaran = this.pembayaran.find(p => p.id_pembayaran === id_pembayaran);
-          if (pembayaran) pembayaran.status = status;
-          alert('Status berhasil diperbarui!');
-          this.generateCharts();
-        } else {
-          alert('Gagal: ' + res.data.message);
-        }
+      .then(() => {
+        alert('Status berhasil diperbarui!');
+        this.generateCharts();
       })
       .catch(err => {
         console.error('Gagal mengirim request:', err);
@@ -148,13 +132,15 @@ export default {
     getGambarUrl(filename, metode) {
       if (!filename) {
         if (metode === 'Tunai') {
-          return 'http://localhost/2/backend/assets/vue/img/bukti_bayar/tunai.png';
+          return 'http://localhost:8000/storage/bukti_bayar/tunai.png';
         }
         return '';
       }
-      return `http://localhost/2/backend/assets/vue/img/bukti_bayar/${filename}`;
+      return `http://localhost:8000/storage/bukti_bayar/${filename}`;
     },
     generateCharts() {
+      if (!Array.isArray(this.pembayaran)) return;
+
       const statusCounts = { lunas: 0, 'belum lunas': 0 };
       const metodeTotals = {};
 
@@ -162,9 +148,8 @@ export default {
         if (statusCounts[p.status] !== undefined) {
           statusCounts[p.status]++;
         }
-
         if (!metodeTotals[p.metode]) metodeTotals[p.metode] = 0;
-        metodeTotals[p.metode] += parseFloat(p.jml_bayar);
+        metodeTotals[p.metode] += parseFloat(p.jml_bayar || 0);
       });
 
       this.statusChartData = {
@@ -194,30 +179,10 @@ export default {
 </script>
 
 <style scoped>
-.card {
-  max-width: 1500px;
-  margin-bottom: 20px;
-}
-.judul-kelola {
-  font-size: 2.5rem;
-  font-weight: bold;
-}
-.bukti-img {
-  max-width: 100px;
-  max-height: 80px;
-  object-fit: contain;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-.card-title i {
-  margin-right: 6px;
-}
-.table td,
-.table th {
-  vertical-align: middle;
-}
-.chart-container {
-  position: relative;
-  height: 300px;
-}
+.card { max-width: 1500px; margin-bottom: 20px; }
+.judul-kelola { font-size: 2.5rem; font-weight: bold; }
+.bukti-img { max-width: 100px; max-height: 80px; object-fit: contain; border: 1px solid #ccc; border-radius: 4px; }
+.card-title i { margin-right: 6px; }
+.table td, .table th { vertical-align: middle; }
+.chart-container { position: relative; height: 300px; }
 </style>

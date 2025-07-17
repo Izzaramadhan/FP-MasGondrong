@@ -2,9 +2,10 @@
   <NavbarAdmin />
   <div>
     <h1>EDIT KENDARAAN</h1>
-<div v-if="form.gambar">
-  <img :src="getGambarUrl(form.gambar)" alt="Gambar Kendaraan" class="kendaraan-img" />
-</div>
+
+    <div v-if="form.gambar">
+      <img :src="getGambarUrl(form.gambar)" alt="Gambar Kendaraan" class="kendaraan-img" />
+    </div>
 
     <form @submit.prevent="simpanPerubahan">
       <div class="form-group">
@@ -41,7 +42,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '@/api';
 import NavbarAdmin from '@/components/NavbarAdmin.vue';
 
 export default {
@@ -53,29 +54,29 @@ export default {
         jenis: '',
         plat_nomor: '',
         harga_perhari: 0,
-        status: 'tersedia'
+        status: 'tersedia',
+        gambar: ''
       }
     };
   },
-mounted() {
-  const id = this.$route.params.id;
-  axios.get(`http://localhost/2/backend/index.php/api/kendaraan/${id}`)
-    .then(res => {
-      if (res.data.status === 'success') {
-        this.form = res.data.data;
-      } else {
-        alert('Data tidak ditemukan');
-      }
-    })
-    .catch(err => {
-      console.error('Gagal mengambil data kendaraan:', err);
-    });
-}
-,
+  mounted() {
+    const id = this.$route.params.id;
+    api.get(`kendaraan/${id}`)
+      .then(res => {
+        if (res.data.status === 'success') {
+          this.form = res.data.data;
+        } else {
+          alert('Data tidak ditemukan');
+        }
+      })
+      .catch(err => {
+        console.error('Gagal mengambil data kendaraan:', err);
+      });
+  },
   methods: {
     simpanPerubahan() {
       const id = this.$route.params.id;
-axios.post(`http://localhost/2/backend/index.php/api/kendaraan/update/${id}`, this.form)
+      api.post(`kendaraan/${id}`, this.form)
         .then(() => {
           alert('Data kendaraan berhasil diperbarui!');
           this.$router.push('/admin/manage-kendaraan');
@@ -84,12 +85,13 @@ axios.post(`http://localhost/2/backend/index.php/api/kendaraan/update/${id}`, th
           console.error('Gagal menyimpan perubahan:', err);
         });
     },
-      getGambarUrl(filename) {
-    return `http://localhost/2/backend/assets/vue/img/kendaraan/${filename}`;
-  }
+    getGambarUrl(filename) {
+      return `http://localhost:8000/storage/kendaraan/${filename}`;
+    }
   }
 };
 </script>
+
 
 <style scoped>
 h1 {
@@ -137,6 +139,7 @@ button {
 button:hover {
   background-color: #2980b9;
 }
+
 .kendaraan-img {
   width: 200px;
   height: auto;
@@ -146,5 +149,4 @@ button:hover {
   border: 1px solid #ccc;
   border-radius: 8px;
 }
-
 </style>

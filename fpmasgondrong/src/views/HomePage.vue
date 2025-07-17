@@ -1,65 +1,61 @@
 <template>
   <main class="home">
-  <section class="hero-section container py-5">
-    <div class="row align-items-center">
-      <div class="col-md-6 home-content">
-        <h1><span v-if="namaUser" class="fw-bold fs-5">Halo, {{ namaUser }}</span></h1>
-
-        <h2><span class="texth1">Selamat datang di Rental Mas Gondrong</span></h2>
-        <h3><span class="text-primary">Sewa Kendaraan</span> <span class="text-warning">Lebih Mudah</span></h3>
-        <p class="lead">
-          Sewa Kendaraan Mas Gondrong adalah solusi sewa motor dan mobil terpercaya
-          dengan proses mudah dan cepat.
-        </p>
-        <a href="#menu" class="btn btn-info text-white">Sewa Sekarang</a>
+    <!-- Hero Section -->
+    <section class="hero-section container py-5">
+      <div class="row align-items-center">
+        <div class="col-md-6 home-content">
+          <h1><span v-if="namaUser" class="fw-bold fs-5">Halo, {{ namaUser }}</span></h1>
+          <h2><span class="texth1">Selamat datang di Rental Mas Gondrong</span></h2>
+          <h3><span class="text-primary">Sewa Kendaraan</span> <span class="text-warning">Lebih Mudah</span></h3>
+          <p class="lead">
+            Sewa Kendaraan Mas Gondrong adalah solusi sewa motor dan mobil terpercaya
+            dengan proses mudah dan cepat.
+          </p>
+          <a href="#menu" class="btn btn-info text-white">Sewa Sekarang</a>
+        </div>
+        <div class="col-md-6 text-center">
+          <img :src="require('@/assets/images/beranda/New.png')" class="hero-image shadow rounded" />
+        </div>
       </div>
-      <div class="col-md-6 text-center">
-        <img :src="require('@/assets/images/beranda/New.png')" class="hero-image shadow rounded" />
-      </div>
-    </div>
-  </section>
+    </section>
 
-<!-- Tentang Kami & Visi Misi -->
-<section class="tentang-section py-5 bg-light">
-  <div class="container">
-    <div class="row align-items-center">
-      <!-- Kolom Kiri: Visi & Misi -->
-        <div class="col-md-6 mb-4 mb-md-0" data-aos="zoom-in" data-aos-delay="100">
-
-        <h2 class="text-primary mb-3">Visi & Misi</h2>
-        <h5 class="text-dark">Visi</h5>
-        <p class="text-muted">
-          Menjadi penyedia layanan sewa kendaraan terpercaya dan terbaik di Yogyakarta yang mengutamakan kenyamanan, keamanan, dan kepuasan pelanggan.
-        </p>
-        <h5 class="text-dark mt-3">Misi</h5>
-        <ul class="text-muted">
-          <li>Menyediakan armada kendaraan yang bersih, terawat, dan siap pakai.</li>
-          <li>Memberikan pelayanan yang ramah, cepat, dan profesional.</li>
-          <li>Menjaga harga sewa yang kompetitif dan transparan.</li>
-          <li>Terus berinovasi dalam layanan untuk memenuhi kebutuhan pelanggan.</li>
-        </ul>
+    <!-- Tentang Kami & Visi Misi -->
+    <section class="tentang-section py-5 bg-light">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-6 mb-4 mb-md-0" data-aos="zoom-in" data-aos-delay="100">
+            <h2 class="text-primary mb-3">Visi & Misi</h2>
+            <h5 class="text-dark">Visi</h5>
+            <p class="text-muted">
+              Menjadi penyedia layanan sewa kendaraan terpercaya dan terbaik di Yogyakarta yang mengutamakan kenyamanan, keamanan, dan kepuasan pelanggan.
+            </p>
+            <h5 class="text-dark mt-3">Misi</h5>
+            <ul class="text-muted">
+              <li>Menyediakan armada kendaraan yang bersih, terawat, dan siap pakai.</li>
+              <li>Memberikan pelayanan yang ramah, cepat, dan profesional.</li>
+              <li>Menjaga harga sewa yang kompetitif dan transparan.</li>
+              <li>Terus berinovasi dalam layanan untuk memenuhi kebutuhan pelanggan.</li>
+            </ul>
+          </div>
+          <div class="col-md-6" data-aos="fade-left">
+            <h2 class="text-primary mb-3">Tentang Kami</h2>
+            <p>
+              Mas Gondrong Rent adalah layanan sewa kendaraan yang berbasis di Yogyakarta,
+              menyediakan berbagai jenis motor dan mobil dengan harga terjangkau, proses pemesanan mudah, dan pelayanan yang ramah.
+            </p>
+            <p>
+              Kami telah melayani ratusan pelanggan dengan berbagai kebutuhan — dari liburan, perjalanan bisnis, hingga kegiatan kampus.
+              Kepuasan pelanggan adalah prioritas utama kami.
+            </p>
+            <ul class="list-unstyled">
+              <li><i class="fas fa-check-circle text-success me-2"></i> Armada bersih dan terawat</li>
+              <li><i class="fas fa-check-circle text-success me-2"></i> Harga transparan tanpa biaya tersembunyi</li>
+              <li><i class="fas fa-check-circle text-success me-2"></i> Gratis antar jemput di area tertentu</li>
+            </ul>
+          </div>
+        </div>
       </div>
-
-      <!-- Kolom Kanan: Tentang Kami -->
-      <div class="col-md-6" data-aos="fade-left">
-        <h2 class="text-primary mb-3">Tentang Kami</h2>
-        <p>
-          Mas Gondrong Rent adalah layanan sewa kendaraan yang berbasis di Yogyakarta,
-          menyediakan berbagai jenis motor dan mobil dengan harga terjangkau, proses pemesanan mudah, dan pelayanan yang ramah.
-        </p>
-        <p>
-          Kami telah melayani ratusan pelanggan dengan berbagai kebutuhan — dari liburan, perjalanan bisnis, hingga kegiatan kampus.
-          Kepuasan pelanggan adalah prioritas utama kami.
-        </p>
-        <ul class="list-unstyled">
-          <li><i class="fas fa-check-circle text-success me-2"></i> Armada bersih dan terawat</li>
-          <li><i class="fas fa-check-circle text-success me-2"></i> Harga transparan tanpa biaya tersembunyi</li>
-          <li><i class="fas fa-check-circle text-success me-2"></i> Gratis antar jemput di area tertentu</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
     <!-- Kendaraan Carousel Section -->
     <section class="menu py-5" id="menu">
@@ -78,24 +74,22 @@
       <div class="container text-center position-relative carousel-wrapper">
         <button class="carousel-nav prev" @click="prevSlide" :disabled="slideIndex === 0"> ❮</button>
 
-       <div class="row flex-nowrap overflow-auto" style="gap: 1rem;">
-  <div class="col-md-4" v-for="(item, index) in kendaraanTampil" :key="index">
-    <div class="card kendaraan-card text-center shadow">
-      <img :src="getGambarUrl(item.gambar)" alt="Gambar kendaraan" class="img-fluid mb-3 kendaraan-img" />
-      <h5>{{ item.tipe }}</h5>
-      <p class="text-primary">Rp {{ formatHarga(item.harga_perhari) }}/hari</p>
- <button class="btn btn-outline-primary mt-auto" @click="handleSewa(item)">Sewa Sekarang</button>
-
-    </div>
-  </div>
-</div>
+        <div class="row flex-nowrap overflow-auto" style="gap: 1rem;">
+          <div class="col-md-4" v-for="(item, index) in kendaraanTampil" :key="index">
+            <div class="card kendaraan-card text-center shadow">
+              <img :src="getGambarUrl(item.gambar)" alt="Gambar kendaraan" class="img-fluid mb-3 kendaraan-img" />
+              <h5>{{ item.tipe }}</h5>
+              <p class="text-primary">Rp {{ formatHarga(item.harga_perhari) }}/hari</p>
+              <button class="btn btn-outline-primary mt-auto" @click="handleSewa(item)">Sewa Sekarang</button>
+            </div>
+          </div>
+        </div>
 
         <button class="carousel-nav next" @click="nextSlide" :disabled="slideIndex + 3 >= kendaraanTersaring.length">❯</button>
       </div>
     </section>
 
-
-<!-- Testimoni -->
+    <!-- Testimoni -->
     <section class="review py-5">
       <h2 class="text-center text-primary">Testimoni</h2>
       <div class="container">
@@ -139,17 +133,15 @@
 <script>
 import { ref, computed, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import api from '@/api'
 
 export default {
   name: 'HomePage',
   setup() {
     const router = useRouter()
     const kendaraan = ref([])
-
     const kategoriDipilih = ref('')
     const slideIndex = ref(0)
-    
 
     const kendaraanTersaring = computed(() => {
       if (!kategoriDipilih.value) return kendaraan.value
@@ -177,28 +169,26 @@ export default {
       slideIndex.value = 0
     })
 
-const handleSewa = (item) => {
-  router.push({
-    name: 'Pemesanan',
-    params: {
-      id_kendaraan: item.id_kendaraan
+    const handleSewa = (item) => {
+      router.push({
+        name: 'Pemesanan',
+        params: {
+          id_kendaraan: item.id_kendaraan
+        }
+      })
     }
-  })
-}
 
     const testimonials = ref([
-      { nama: 'Danang', text: 'Pelayanannya cepat dan motornya bersih! Saya sewa Beat 3 hari dan semuanya lancar. Mas Gondrong juga ramah banget!', rating: 5 },
-      { nama: 'Ubay', text: 'Mobil Avanza yang saya sewa nyaman dipakai untuk perjalanan keluarga. Harganya juga bersahabat. Recommended!', rating: 5 },
-      { nama: 'Brodin', text: 'Pertama kali ke Jogja dan bingung cari kendaraan. Untung ketemu Sewa Kendaraan Mas Gondrong. Prosesnya gampang, motor langsung diantar ke hotel.', rating: 5 }
+      { nama: 'Danang', text: 'Pelayanannya cepat dan motornya bersih!', rating: 5 },
+      { nama: 'Ubay', text: 'Mobil Avanza yang saya sewa nyaman dipakai.', rating: 5 },
+      { nama: 'Brodin', text: 'Pertama kali ke Jogja dan bingung cari kendaraan.', rating: 5 }
     ])
 
     const getGambarUrl = (namaFile) => {
-      const url = `http://localhost/2/backend/assets/vue/img/kendaraan/${namaFile}`;
-      console.log('Gambar URL:', url); 
-      return url;
+      return `http://localhost:8000/storage/kendaraan/${namaFile}`
     }
-    
-const namaUser = ref('')
+
+    const namaUser = ref('')
 
     const formatHarga = (harga) => {
       return parseInt(harga).toLocaleString('id-ID')
@@ -206,21 +196,20 @@ const namaUser = ref('')
 
     const fetchData = async () => {
       try {
-        const resKendaraan = await axios.get('http://localhost/2/backend/index.php/api/kendaraan')
-        kendaraan.value = resKendaraan.data
-
+        const resKendaraan = await api.get('kendaraan')
+        kendaraan.value = Array.isArray(resKendaraan.data) ? resKendaraan.data : resKendaraan.data.data
       } catch (error) {
         console.error('Gagal mengambil data:', error)
       }
     }
 
-        onMounted(() => {
-          fetchData()
-            const user = JSON.parse(localStorage.getItem('user'))
+    onMounted(() => {
+      fetchData()
+      const user = JSON.parse(localStorage.getItem('user'))
       if (user && user.nama) {
         namaUser.value = user.nama
       }
-        })
+    })
 
     return {
       kendaraan,

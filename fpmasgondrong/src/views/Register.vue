@@ -55,35 +55,64 @@ export default {
     };
   },
   methods: {
-handleRegister() {
-  if (this.form.password !== this.form.konfirmasi) {
-    alert("Password dan konfirmasi tidak cocok.");
-    return;
-  }
+    handleRegister() {
+      // Validasi konfirmasi password
+      if (this.form.password !== this.form.konfirmasi) {
+        alert("Password dan konfirmasi tidak cocok.");
+        return;
+      }
 
-  console.log("Data dikirim ke backend:", this.form); // ✅ DEBUG DI SINI
+      const payload = {
+        nama: this.form.nama,
+        email: this.form.email,
+        no_hp: this.form.no_hp,
+        alamat: this.form.alamat,
+        password: this.form.password
+      };
 
-  fetch("http://localhost/2/backend/index.php/auth/register", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(this.form)
-  })
-    .then(res => res.json())
-    .then(data => {
-      console.log(data);
-      alert(data.message);
-    })
-    .catch(err => {
-      console.error(err);
-      alert("Gagal mengirim data ke server.");
-    });
-}
-
-
+      fetch("http://localhost:8000/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'success') {
+            alert("Pendaftaran berhasil! Silakan login.");
+            this.$router.push('/login');
+          } else {
+            alert(data.message || "Terjadi kesalahan.");
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          alert("Gagal mengirim data ke server.");
+        });
+    }
   }
 };
 </script>
 
 <style scoped>
+.register-box {
+  max-width: 500px;
+  margin: 80px auto;
+  background: #f8f9fa;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
 
+.btn-green {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px;
+  font-weight: bold;
+  border-radius: 6px;
+}
+
+.btn-green:hover {
+  background-color: #218838;
+}
 </style>

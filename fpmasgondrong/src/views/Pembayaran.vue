@@ -21,7 +21,7 @@
         </select>
       </div>
 
-      <!-- Card muncul jika metode Transfer -->
+      <!-- Info rekening jika transfer -->
       <div v-if="showRekeningCard" class="qr-popup">
         <div class="qr-card">
           <h5 class="text-center">Transfer ke Salah Satu Rekening Berikut</h5>
@@ -34,7 +34,7 @@
         </div>
       </div>
 
-      <!-- Upload hanya muncul jika bukan Tunai -->
+      <!-- Upload jika bukan tunai -->
       <div class="mb-3 mt-3" v-if="metode !== 'Tunai'">
         <label for="bukti" class="form-label">Upload Bukti Pembayaran</label>
         <input type="file" @change="handleFileChange" class="form-control" accept="image/*,.pdf" required />
@@ -70,10 +70,10 @@ export default {
       return;
     }
 
-    fetch(`http://localhost/2/backend/index.php/api/pemesanan/${this.id_pemesanan}`)
+    fetch(`http://localhost:8000/api/pemesanan/${this.id_pemesanan}`)
       .then(res => res.json())
       .then(data => {
-        if (data.status && data.data) {
+        if (data.status === 'success' && data.data) {
           this.jml_bayar = parseInt(data.data.total_harga);
         } else {
           alert('Data pemesanan tidak ditemukan.');
@@ -100,39 +100,39 @@ export default {
         return;
       }
 
-const formData = new FormData();
-formData.append('id_pemesanan', this.id_pemesanan);
-formData.append('tgl_bayar', this.formattedDate);
-formData.append('metode', this.metode);
-formData.append('jml_bayar', this.jml_bayar);
+      const formData = new FormData();
+      formData.append('id_pemesanan', this.id_pemesanan);
+      formData.append('tgl_bayar', this.formattedDate);
+      formData.append('metode', this.metode);
+      formData.append('jml_bayar', this.jml_bayar);
 
-if (this.metode !== 'Tunai' && this.buktiFile) {
-  formData.append('bukti_bayar', this.buktiFile);
-} else if (this.metode !== 'Tunai') {
-  alert('File bukti belum dipilih!');
-  return;
-}
+      if (this.metode !== 'Tunai' && this.buktiFile) {
+        formData.append('bukti_bayar', this.buktiFile);
+      }
 
       try {
-        const res = await fetch('http://localhost/2/backend/index.php/api/pembayaran/simpan', {
+        const res = await fetch('http://localhost:8000/api/pembayaran/simpan', {
           method: 'POST',
           body: formData
         });
 
         const resultText = await res.text();
-        console.log('Raw response:', resultText);
-
         let result;
+
         try {
           result = JSON.parse(resultText);
         } catch (jsonErr) {
-          console.error('❌ Bukan JSON:', resultText);
-          alert('Terjadi kesalahan di server: ' + resultText);
+          console.error('❌ Respon bukan JSON:', resultText);
+          alert('Server error: ' + resultText);
           return;
         }
 
-        alert(result.message);
-        this.$router.push('/');
+        if (res.ok && result.status === 'success') {
+          alert(result.message || 'Pembayaran berhasil!');
+          this.$router.push('/');
+        } else {
+          alert(result.message || 'Terjadi kesalahan.');
+        }
       } catch (err) {
         console.error('❌ Error saat fetch:', err);
         alert('Gagal melakukan pembayaran.');

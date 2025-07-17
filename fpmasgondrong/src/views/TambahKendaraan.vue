@@ -1,37 +1,36 @@
 <template>
   <AdminLayout>
-  <div class="form-container">
-    <h1>Tambah Kendaraan</h1>
+    <div class="form-container">
+      <h1>Tambah Kendaraan</h1>
 
-    <form @submit.prevent="simpanKendaraan" enctype="multipart/form-data">
-      <label>Tipe Kendaraan</label>
-      <input v-model="tipe" type="text" required />
+      <form @submit.prevent="simpanKendaraan" enctype="multipart/form-data">
+        <label for="tipe">Tipe Kendaraan</label>
+        <input v-model="tipe" type="text" id="tipe" required />
 
-      <label>Jenis Kendaraan</label>
-      <select v-model="jenis" required>
-        <option value="">-- Pilih Jenis --</option>
-        <option value="Mobil">Mobil</option>
-        <option value="Motor">Motor</option>
-      </select>
+        <label for="jenis">Jenis Kendaraan</label>
+        <select v-model="jenis" id="jenis" required>
+          <option value="">-- Pilih Jenis --</option>
+          <option value="Mobil">Mobil</option>
+          <option value="Motor">Motor</option>
+        </select>
 
-      <label>Plat Nomor</label>
-      <input v-model="plat_nomor" type="text" required />
+        <label for="plat_nomor">Plat Nomor</label>
+        <input v-model="plat_nomor" type="text" id="plat_nomor" required />
 
-      <label>Harga per Hari</label>
-      <input v-model.number="harga_perhari" type="number" required />
+        <label for="harga">Harga per Hari</label>
+        <input v-model.number="harga_perhari" type="number" id="harga" required />
 
-      <label>Gambar Kendaraan</label>
-      <input type="file" @change="handleFileChange" required />
+        <label for="gambar">Gambar Kendaraan</label>
+        <input type="file" @change="handleFileChange" id="gambar" accept="image/*" required />
 
-      <button type="submit">Simpan</button>
-    </form>
-  </div>
-
+        <button type="submit">Simpan</button>
+      </form>
+    </div>
   </AdminLayout>
 </template>
 
 <script>
-import AdminLayout from '@/components/AdminLayout.vue';
+import AdminLayout from '@/components/AdminLayout.vue'
 import axios from 'axios'
 
 export default {
@@ -51,7 +50,7 @@ export default {
     },
     async simpanKendaraan() {
       if (!this.gambar) {
-        alert('Gambar belum dipilih!')
+        alert('Silakan unggah gambar kendaraan terlebih dahulu.')
         return
       }
 
@@ -62,26 +61,24 @@ export default {
       formData.append('harga_perhari', this.harga_perhari)
       formData.append('gambar', this.gambar)
 
-try {
-  const response = await axios.post(
-    'http://localhost/2/backend/index.php/api/kendaraan/simpan',
-    formData,
-    { headers: { 'Content-Type': 'multipart/form-data' } }
-  )
+      try {
+        const response = await axios.post(
+          'http://localhost:8000/api/kendaraan/simpan',
+          formData,
+          { headers: { 'Content-Type': 'multipart/form-data' } }
+        )
 
-if (response.data.status) {
-  alert('Berhasil menambahkan kendaraan!')
-  this.$router.push('/admin/manage-kendaraan')
-} else {
-  const msg = response.data.message || response.data.error || 'Gagal tanpa pesan';
-  alert('Gagal menyimpan kendaraan: ' + msg)
-}
-
-} catch (err) {
-  console.error('❌ Gagal menyimpan kendaraan:', err)
-  alert('Terjadi kesalahan saat menyimpan.')
-}
-
+        if (response.data.status === 'success') {
+          alert('✅ Kendaraan berhasil ditambahkan!')
+          this.$router.push('/admin/manage-kendaraan')
+        } else {
+          const msg = response.data.message || 'Gagal menyimpan kendaraan.'
+          alert('❌ ' + msg)
+        }
+      } catch (err) {
+        console.error('❌ Gagal menyimpan kendaraan:', err)
+        alert('Terjadi kesalahan saat menghubungi server.')
+      }
     }
   }
 }
@@ -94,13 +91,24 @@ if (response.data.status) {
   background: #f7f9fb;
   padding: 30px;
   border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 form {
   display: flex;
   flex-direction: column;
   gap: 15px;
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 4px;
 }
 
 input,

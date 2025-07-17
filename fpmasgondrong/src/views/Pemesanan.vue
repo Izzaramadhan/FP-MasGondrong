@@ -6,9 +6,8 @@
         <div class="kendaraan-info">
           <img :src="gambarKendaraan" alt="Gambar Kendaraan" />
           <h5>{{ kendaraanDipilih }}</h5>
- <p><strong>Harga per hari:</strong> {{ formatRupiah(hargaPerHari) }}</p>
-<p>Motor atau mobil pilihan yang siap digunakan untuk kebutuhan Anda.</p>
-
+          <p><strong>Harga per hari:</strong> {{ formatRupiah(hargaPerHari) }}</p>
+          <p>Motor atau mobil pilihan yang siap digunakan untuk kebutuhan Anda.</p>
         </div>
 
         <!-- Kolom Kanan -->
@@ -20,8 +19,7 @@
             <label class="form-label">Tanggal Selesai</label>
             <input type="date" v-model="tglSelesai" class="form-control" required />
 
-<div class="total-harga">Total Harga: Rp {{ totalHarga.toLocaleString('id-ID') }}</div>
-
+            <div class="total-harga">Total Harga: Rp {{ totalHarga.toLocaleString('id-ID') }}</div>
 
             <button type="submit" class="btn-green">Pesan Sekarang</button>
           </form>
@@ -55,10 +53,9 @@ export default {
     const hargaPerHari = ref(0)
     const totalHarga = ref(0)
 
-    // Ambil data kendaraan berdasarkan ID
     const fetchKendaraan = async () => {
       try {
-        const res = await axios.get(`http://localhost/2/backend/index.php/api/kendaraan/${id_kendaraan.value}`)
+        const res = await axios.get(`http://localhost:8000/api/kendaraan/${id_kendaraan.value}`)
         const data = res.data.data
 
         kendaraanDipilih.value = data.tipe
@@ -90,11 +87,20 @@ export default {
 
     const pesanKendaraan = async () => {
       const userString = localStorage.getItem('user')
-      console.log('Isi localStorage user:', userString)
+      const user = userString ? JSON.parse(userString) : null
 
-      const user = JSON.parse(userString)
       if (!user || !user.id_user) {
         alert('Anda belum login! Silakan login terlebih dahulu.')
+        return
+      }
+
+      if (!tglMulai.value || !tglSelesai.value) {
+        alert('Tanggal pemesanan belum lengkap.')
+        return
+      }
+
+      if (new Date(tglSelesai.value) < new Date(tglMulai.value)) {
+        alert('Tanggal selesai tidak boleh lebih awal dari tanggal mulai.')
         return
       }
 
@@ -108,10 +114,8 @@ export default {
         total_harga: totalHarga.value
       }
 
-      console.log('Data dikirim ke backend:', data)
-
       try {
-        const res = await axios.post('http://localhost/2/backend/index.php/api/pemesanan/simpan', data, {
+        const res = await axios.post('http://localhost:8000/api/pemesanan/simpan', data, {
           headers: { 'Content-Type': 'application/json' }
         })
 
@@ -121,15 +125,13 @@ export default {
 
           router.push({
             name: 'Pembayaran',
-            query: {
-              id_pemesanan: idPemesananBaru
-            }
+            query: { id_pemesanan: idPemesananBaru }
           })
         } else {
           alert('Gagal menyimpan data pemesanan: ' + res.data.message)
         }
       } catch (error) {
-        console.error(error)
+        console.error('Gagal menyimpan pemesanan:', error)
         alert('Terjadi kesalahan saat menghubungi server.')
       }
     }
@@ -152,8 +154,60 @@ export default {
 }
 </script>
 
-
-
 <style scoped>
+.pemesanan-wrapper {
+  max-width: 900px;
+  margin: 80px auto;
+  padding: 30px;
+  background: #f9f9f9;
+  border-radius: 12px;
+}
 
+.pemesanan-card-body {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.kendaraan-info {
+  flex: 1;
+  text-align: center;
+}
+
+.kendaraan-info img {
+  width: 100%;
+  max-width: 280px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.form-pemesanan {
+  flex: 1;
+}
+
+.form-label {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.total-harga {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin: 20px 0;
+}
+
+.btn-green {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 12px;
+  width: 100%;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-green:hover {
+  background-color: #218838;
+}
 </style>

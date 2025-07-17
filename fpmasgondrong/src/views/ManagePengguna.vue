@@ -2,15 +2,18 @@
   <AdminLayout>
     <template #header></template>
     <h1 class="text-center my-4 judul-kelola">Kelola Pengguna</h1>
-<div class="row mb-4 text-center">
-  <div class="col-md-3" v-for="item in summaryCards" :key="item.title">
-    <div class="card shadow-sm p-3">
-      <h6>{{ item.title }}</h6>
-      <h4 class="text-primary">{{ item.value }}</h4>
-    </div>
-  </div>
-</div>
 
+    <!-- Statistik Ringkasan -->
+    <div class="row mb-4 text-center">
+      <div class="col-md-3" v-for="item in summaryCards" :key="item.title">
+        <div class="card shadow-sm p-3">
+          <h6>{{ item.title }}</h6>
+          <h4 class="text-primary">{{ item.value }}</h4>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabel Pengguna -->
     <div class="container">
       <div class="card shadow-sm">
         <div class="card-body table-responsive">
@@ -45,39 +48,40 @@
   </AdminLayout>
 </template>
 
-
 <script>
-import axios from 'axios';
+import api from '@/api';
 import AdminLayout from '@/components/AdminLayout.vue';
 
 export default {
   components: { AdminLayout },
   data() {
     return {
-      pengguna: []
+      pengguna: [],
+      summaryCards: []
     };
   },
   mounted() {
     this.getPengguna();
   },
   methods: {
-getPengguna() {
-  axios.get('http://localhost/2/backend/index.php/api/pengguna')
-    .then(response => {
-      console.log('DATA PENGGUNA:', response.data); // lihat struktur di console
-      this.pengguna = response.data;
-    })
-    .catch(error => {
-      console.error('Gagal mengambil data pengguna:', error);
-    });
-}
-,
+    getPengguna() {
+      api.get('pengguna')
+        .then(response => {
+          this.pengguna = response.data;
+          this.summaryCards = [
+            { title: 'Total Pengguna', value: this.pengguna.length }
+          ];
+        })
+        .catch(error => {
+          console.error('Gagal mengambil data pengguna:', error);
+        });
+    },
     hapusPengguna(id) {
       if (confirm('Yakin ingin menghapus pengguna ini?')) {
-        axios.get(`http://localhost/2/backend/index.php/api/pengguna/delete/${id}`)
+        api.get(`pengguna/delete/${id}`)
           .then(res => {
             if (res.data.success) {
-              this.getPengguna(); // refresh data
+              this.getPengguna();
             } else {
               alert('Gagal menghapus pengguna');
             }
@@ -90,13 +94,15 @@ getPengguna() {
   }
 };
 </script>
+
 <style scoped>
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
 }
-h1{
+
+h1 {
   text-align: center;
   font-size: 32px;
   color: #2c3e50;
@@ -106,6 +112,7 @@ h1{
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
+
 th, td {
   border: 1px solid #ddd;
   padding: 10px;
@@ -138,6 +145,7 @@ button {
 button:hover {
   background-color: #2980b9;
 }
+
 .card {
   max-width: 1500px;
   margin-bottom: 20px;

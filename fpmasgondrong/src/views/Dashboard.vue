@@ -40,14 +40,12 @@
 
 <script>
 import AdminLayout from '@/components/AdminLayout.vue';
-import axios from 'axios';
+import api from '@/api';
 import Chart from 'chart.js/auto';
 
 export default {
   name: 'DashboardAdmin',
-  components: {
-    AdminLayout
-  },
+  components: { AdminLayout },
   data() {
     return {
       chartKendaraan: null,
@@ -64,13 +62,14 @@ export default {
   },
   methods: {
     fetchStatistikKendaraan() {
-      axios.get('http://localhost/2/backend/index.php/api/kendaraan')
+      api.get('kendaraan')
         .then(response => {
           const kendaraan = Array.isArray(response.data) ? response.data : response.data.data;
-          const tersedia = kendaraan.filter(k => k.status.toLowerCase() === 'tersedia').length;
+          const tersedia = kendaraan.filter(k => k.status?.toLowerCase() === 'tersedia').length;
           const tidakTersedia = kendaraan.length - tersedia;
 
-          const ctx = document.getElementById('kendaraanChart').getContext('2d');
+          const ctx = document.getElementById('kendaraanChart')?.getContext('2d');
+          if (!ctx) return;
           if (this.chartKendaraan) this.chartKendaraan.destroy();
           this.chartKendaraan = new Chart(ctx, {
             type: 'doughnut',
@@ -78,41 +77,30 @@ export default {
               labels: ['Tersedia', 'Tidak Tersedia'],
               datasets: [{
                 data: [tersedia, tidakTersedia],
-                backgroundColor: ['#28a745', '#6c757d'],
-                borderColor: ['#fff', '#fff'],
-                borderWidth: 2
+                backgroundColor: ['#28a745', '#6c757d']
               }]
             },
-            options: {
-              responsive: true,
-              plugins: {
-                legend: {
-                  position: 'bottom'
-                }
-              }
-            }
+            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
           });
         })
-        .catch(error => {
-          console.error('Gagal ambil data kendaraan:', error);
-        });
+        .catch(error => console.error('Gagal ambil data kendaraan:', error));
     },
 
     fetchStatistikPembayaran() {
-      axios.get('http://localhost/2/backend/index.php/api/pembayaran')
+      api.get('pembayaran')
         .then(res => {
-          const pembayaran = res.data;
-
+          const pembayaran = Array.isArray(res.data) ? res.data : res.data.data;
           const statusCounts = { lunas: 0, 'belum lunas': 0 };
           const metodeTotals = {};
 
           pembayaran.forEach(p => {
             if (statusCounts[p.status] !== undefined) statusCounts[p.status]++;
             if (!metodeTotals[p.metode]) metodeTotals[p.metode] = 0;
-            metodeTotals[p.metode] += parseFloat(p.jml_bayar);
+            metodeTotals[p.metode] += parseFloat(p.jml_bayar ?? 0);
           });
 
-          const statusCtx = document.getElementById('pembayaranStatusChart').getContext('2d');
+          const statusCtx = document.getElementById('pembayaranStatusChart')?.getContext('2d');
+          if (!statusCtx) return;
           if (this.chartPembayaranStatus) this.chartPembayaranStatus.destroy();
           this.chartPembayaranStatus = new Chart(statusCtx, {
             type: 'doughnut',
@@ -124,17 +112,11 @@ export default {
                 backgroundColor: ['#2ecc71', '#e74c3c']
               }]
             },
-            options: {
-              responsive: true,
-              plugins: {
-                legend: {
-                  position: 'bottom'
-                }
-              }
-            }
+            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
           });
 
-          const metodeCtx = document.getElementById('pembayaranMetodeChart').getContext('2d');
+          const metodeCtx = document.getElementById('pembayaranMetodeChart')?.getContext('2d');
+          if (!metodeCtx) return;
           if (this.chartPembayaranMetode) this.chartPembayaranMetode.destroy();
           this.chartPembayaranMetode = new Chart(metodeCtx, {
             type: 'bar',
@@ -152,29 +134,21 @@ export default {
                 y: {
                   beginAtZero: true,
                   ticks: {
-                    callback: function(value) {
-                      return 'Rp ' + value.toLocaleString('id-ID');
-                    }
+                    callback: value => 'Rp ' + Number(value).toLocaleString('id-ID')
                   }
                 }
               },
-              plugins: {
-                legend: {
-                  display: false
-                }
-              }
+              plugins: { legend: { display: false } }
             }
           });
         })
-        .catch(err => {
-          console.error('Gagal ambil data pembayaran:', err);
-        });
+        .catch(err => console.error('Gagal ambil data pembayaran:', err));
     },
 
     fetchStatistikPemesanan() {
-      axios.get('http://localhost/2/backend/index.php/api/pemesanan')
+      api.get('pemesanan')
         .then(res => {
-          const pemesanan = res.data;
+          const pemesanan = Array.isArray(res.data) ? res.data : res.data.data;
 
           const countPerDate = {};
           pemesanan.forEach(item => {
@@ -182,7 +156,8 @@ export default {
             countPerDate[date] = (countPerDate[date] || 0) + 1;
           });
 
-          const lineCtx = document.getElementById('pemesananLineChart').getContext('2d');
+          const lineCtx = document.getElementById('pemesananLineChart')?.getContext('2d');
+          if (!lineCtx) return;
           if (this.chartPemesananLine) this.chartPemesananLine.destroy();
           this.chartPemesananLine = new Chart(lineCtx, {
             type: 'line',
@@ -199,16 +174,8 @@ export default {
             },
             options: {
               responsive: true,
-              plugins: {
-                legend: {
-                  position: 'bottom'
-                }
-              },
-              scales: {
-                y: {
-                  beginAtZero: true
-                }
-              }
+              plugins: { legend: { position: 'bottom' } },
+              scales: { y: { beginAtZero: true } }
             }
           });
 
@@ -217,7 +184,8 @@ export default {
             if (statusCount[p.status] !== undefined) statusCount[p.status]++;
           });
 
-          const doughnutCtx = document.getElementById('pemesananDoughnutChart').getContext('2d');
+          const doughnutCtx = document.getElementById('pemesananDoughnutChart')?.getContext('2d');
+          if (!doughnutCtx) return;
           if (this.chartPemesananDoughnut) this.chartPemesananDoughnut.destroy();
           this.chartPemesananDoughnut = new Chart(doughnutCtx, {
             type: 'doughnut',
@@ -228,22 +196,13 @@ export default {
                 backgroundColor: ['#f1c40f', '#2ecc71', '#e74c3c']
               }]
             },
-            options: {
-              responsive: true,
-              plugins: {
-                legend: {
-                  position: 'bottom'
-                }
-              }
-            }
+            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
           });
         })
-        .catch(err => {
-          console.error('Gagal ambil data pemesanan:', err);
-        });
+        .catch(err => console.error('Gagal ambil data pemesanan:', err));
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -272,6 +231,6 @@ export default {
   background: #fff;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 </style>

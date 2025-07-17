@@ -4,22 +4,21 @@
 
     <h1 class="text-center my-4 judul-kelola">Kelola Pemesanan</h1>
 
-
-<!-- Chart -->
-<div class="container row mx-auto mb-4">
-  <div class="col-md-6 mb-4">
-    <h5 class="text-center">Jumlah Pemesanan per Hari</h5>
-    <div style="height: 250px;"> <!-- Ukuran kecil -->
-      <Line v-if="pemesanan.length > 0" :data="lineChartData" :options="chartOptions" />
+    <!-- Chart -->
+    <div class="container row mx-auto mb-4">
+      <div class="col-md-6 mb-4">
+        <h5 class="text-center">Jumlah Pemesanan per Hari</h5>
+        <div style="height: 250px;">
+          <Line v-if="pemesanan.length > 0" :data="lineChartData" :options="chartOptions" />
+        </div>
+      </div>
+      <div class="col-md-6 mb-4">
+        <h5 class="text-center">Status Pemesanan</h5>
+        <div style="height: 250px;">
+          <Doughnut v-if="pemesanan.length > 0" :data="doughnutData" :options="chartOptions" />
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="col-md-6 mb-4">
-    <h5 class="text-center">Status Pemesanan</h5>
-    <div style="height: 250px;"> <!-- Ukuran kecil -->
-      <Doughnut v-if="pemesanan.length > 0" :data="doughnutData" :options="chartOptions" />
-    </div>
-  </div>
-</div>
 
     <!-- Filter -->
     <div class="container text-center mb-3">
@@ -87,9 +86,9 @@
 </template>
 
 <script>
-import axios from 'axios';
 import AdminLayout from '@/components/AdminLayout.vue';
 import { Line, Doughnut } from 'vue-chartjs';
+import api from '@/api';
 import {
   Chart as ChartJS,
   Title,
@@ -171,7 +170,7 @@ export default {
     }
   },
   mounted() {
-    axios.get('http://localhost/2/backend/index.php/api/pemesanan')
+    api.get('pemesanan')
       .then(res => {
         this.pemesanan = res.data;
       })
@@ -181,7 +180,7 @@ export default {
   },
   methods: {
     updateStatus(id_pemesanan, status) {
-      axios.post("http://localhost/2/backend/index.php/api/pemesanan/update_status", {
+      api.post('pemesanan/update_status', {
         id_pemesanan,
         status
       }).then(() => {
