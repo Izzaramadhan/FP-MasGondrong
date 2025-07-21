@@ -19,31 +19,44 @@ class PembayaranController extends Controller
         ]);
     }
 
-    // Simpan data pembayaran baru
     public function store(Request $request)
     {
+        \Log::info('Isi request pembayaran:', $request->all());
+
         $request->validate([
             'id_pemesanan' => 'required|integer|exists:pemesanan,id_pemesanan',
+            'tgl_bayar' => 'required|date',
             'bukti_bayar' => 'required|file|image|max:2048', // maks. 2MB dan harus gambar
+            'jml_bayar' => 'required|numeric',
+            'metode' => 'required|string',
+            'bukti_bayar' => $request->metode === 'Tunai' ? 'nullable' : 'required|file|image|max:2048',
         ]);
-
-        // Simpan file ke storage
-        $file = $request->file('bukti_bayar');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $path = $file->storeAs('public/bukti_bayar', $filename); // simpan ke /storage/app/public/bukti_bayar
-
+    
+        if ($request->metode === 'Tunai') {
+            $nama_file = 'tunai.png'; // nama file default yang sudah ada di public/
+        } else {
+            $file = $request->file('bukti_bayar');
+            if ($file) {
+                $nama_file = time().'_'.$file->getClientOriginalName();
+                $file->move(public_path('bukti_bayar'), $nama_file);
+            } else {
+                return response()->json(['error' => 'Bukti bayar wajib diupload jika metode bukan Tunai.'], 400);
+            }
+        }
+        
         $pembayaran = Pembayaran::create([
             'id_pemesanan' => $request->id_pemesanan,
-            'bukti_bayar' => $filename,
-            'status_pembayaran' => 'Menunggu Konfirmasi'
+            'tgl_bayar' => $request->tgl_bayar,
+            'jml_bayar' => $request->jml_bayar,
+            'metode' => $request->metode,
+            'bukti_bayar' => $nama_file,
+            'status' => 'belum lunas' // ✅ inilah perbaikannya
         ]);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Pembayaran berhasil disimpan.',
-            'data' => $pembayaran
-        ]);
+        
+    
+        return response()->json(['message' => 'Pembayaran berhasil disimpan', 'data' => $pembayaran], 201);
     }
+    
 
     // Update status pembayaran
     public function updateStatus(Request $request)

@@ -8,10 +8,15 @@ class Pembayaran extends Model
     protected $table = 'pembayaran';
     protected $primaryKey = 'id_pembayaran';
     public $timestamps = false;
-
     protected $fillable = [
-        'id_pemesanan', 'bukti_bayar', 'status_pembayaran'
+        'id_pemesanan',
+        'tgl_bayar',
+        'jml_bayar',
+        'metode',
+        'status',
+        'bukti_bayar'
     ];
+    
 
     public function pemesanan()
     {

@@ -116,7 +116,7 @@ export default {
         });
     },
     ubahStatus(id_pembayaran, status) {
-      api.post('pembayaran/update_status', {
+      api.get('pembayaran/update_status', {
         id_pembayaran,
         status
       })

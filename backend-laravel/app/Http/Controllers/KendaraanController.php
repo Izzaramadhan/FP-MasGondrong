@@ -34,9 +34,10 @@ class KendaraanController extends Controller
             'harga_perhari' => 'required|numeric',
             'gambar' => 'image|max:2048',
         ]);
+$file = $request->file('gambar');
+$nama_gambar = time() . '_' . $file->getClientOriginalName();
+$file->move(public_path('storage/kendaraan'), $nama_gambar);
 
-        $path = $request->file('gambar')->store('public/kendaraan');
-        $nama_gambar = basename($path);
 
         $kendaraan = Kendaraan::create([
             'tipe' => $request->tipe,

@@ -76,10 +76,10 @@ export default {
   methods: {
     simpanPerubahan() {
       const id = this.$route.params.id;
-      api.post(`kendaraan/${id}`, this.form)
+      api.put(`kendaraan/${id}`, this.form)
         .then(() => {
           alert('Data kendaraan berhasil diperbarui!');
-          this.$router.push('/admin/manage-kendaraan');
+          this.$router.push('/admin/kendaraan');
         })
         .catch(err => {
           console.error('Gagal menyimpan perubahan:', err);

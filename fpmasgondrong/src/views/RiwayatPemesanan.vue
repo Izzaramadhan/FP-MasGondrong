@@ -8,34 +8,57 @@
       Belum ada riwayat pemesanan.
     </div>
 
-    <div v-else class="row">
-      <div
-        v-for="item in pemesanan"
-        :key="item.id_pemesanan"
-        class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4"
-      >
-        <div class="card h-100 p-3">
-          <p><strong>ID Pemesanan:</strong> {{ item.id_pemesanan }}</p>
-          <p><strong>Tanggal Mulai:</strong> {{ formatTanggal(item.tgl_mulai) }}</p>
-          <p><strong>Tanggal Selesai:</strong> {{ formatTanggal(item.tgl_selesai) }}</p>
-          <p><strong>Kendaraan:</strong> {{ item.jenis }} - {{ item.tipe }} ({{ item.plat_nomor }})</p>
-          <p><strong>Total Harga:</strong> Rp {{ formatHarga(item.total_harga) }}</p>
-          <p><strong>Status:</strong>
-            <span :class="{
-              'text-warning': item.status === 'diproses',
-              'text-success': item.status === 'selesai',
-              'text-danger': item.status === 'batal'
-            }">
-              {{ item.status }}
-            </span>
-          </p>
-        </div>
+    <div v-else>
+  <div
+    v-for="item in pemesanan"
+    :key="item.id_pemesanan"
+    class="card mb-4 w-100"
+  >
+    <div class="d-flex flex-column flex-md-row">
+      <!-- Gambar -->
+      <div class="flex-shrink-0" style="width: 300px;">
+        <img
+          :src="`http://localhost:8000/uploads/${item.kendaraan.gambar}`"
+          class="img-fluid h-100"
+          alt="Gambar Kendaraan"
+          style="object-fit: cover;"
+          v-if="item.kendaraan && item.kendaraan.gambar"
+        />
+      </div>
+
+      <!-- Konten -->
+      <div class="p-3 flex-grow-1">
+        <h5 class="mb-3">ID Pemesanan: {{ item.id_pemesanan }}</h5>
+
+        <p><strong>Tanggal Mulai:</strong> {{ formatTanggal(item.tgl_mulai) }}</p>
+        <p><strong>Tanggal Selesai:</strong> {{ formatTanggal(item.tgl_selesai) }}</p>
+
+        <p v-if="item.kendaraan">
+          <strong>Kendaraan:</strong>
+          {{ item.kendaraan.jenis }} - {{ item.kendaraan.tipe }}
+          ({{ item.kendaraan.plat_nomor }})
+        </p>
+
+        <p><strong>Total Harga:</strong> Rp {{ formatHarga(item.total_harga) }}</p>
+
+        <p>
+          <strong>Status:</strong>
+          <span :class="{
+            'text-warning': item.status === 'diproses',
+            'text-success': item.status === 'selesai',
+            'text-danger': item.status === 'batal'
+          }">
+            {{ item.status }}
+          </span>
+        </p>
       </div>
     </div>
+  </div>
+</div>
 
-    <router-link to="/" class="btn btn-warning mt-3">Kembali ke halaman utama</router-link>
   </div>
 </template>
+
 
 <script>
 import axios from 'axios';
@@ -61,13 +84,17 @@ export default {
 
       try {
         const url = `http://localhost:8000/api/pemesanan/riwayat/${id_user}`;
-        const res = await axios.get(url);
+console.log('🔗 Fetching from:', url);
+const res = await axios.get(url);
+console.log('📥 Response:', res.data);
 
-        if (res.data.status === 'success') {
-          this.pemesanan = res.data.data || [];
-        } else {
-          alert('Gagal mengambil data pemesanan.');
-        }
+
+if (res.data.status) {
+  this.pemesanan = res.data.data || [];
+} else {
+  alert('Gagal mengambil data pemesanan.');
+}
+
       } catch (err) {
         console.error('Gagal mengambil data pemesanan:', err);
         alert('Terjadi kesalahan saat menghubungi server.');
@@ -86,18 +113,28 @@ export default {
     }
   },
   mounted() {
-    this.fetchPemesanan();
-  }
+  console.log('📦 Halaman RiwayatPemesanan dimuat!');
+  this.fetchPemesanan();
+}
+
 };
 </script>
 
 <style scoped>
-.card {
+.riwayat-card {
   background-color: #f8f9fa;
   border-left: 5px solid #1E73BE;
   transition: 0.2s ease-in-out;
+  width: 100%;
 }
-.card:hover {
+
+.riwayat-card:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
+
+.riwayat-card img {
+  min-height: 200px;
+  max-height: 250px;
+}
+
 </style>

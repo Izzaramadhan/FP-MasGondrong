@@ -3,13 +3,13 @@
     <h4 class="text-center mb-3">Pembayaran</h4>
 
     <div class="total-harga">
-      Total: Rp {{ jml_bayar.toLocaleString('id-ID') }}
+      Total: Rp {{ formattedTotal }}
     </div>
 
     <form @submit.prevent="handlePayment" enctype="multipart/form-data">
       <div class="mb-3">
         <label for="tgl_bayar" class="form-label">Tanggal Bayar</label>
-        <input type="text" id="tgl_bayar" class="form-control" :value="formattedDate" readonly />
+        <input type="text" id="tgl_bayar" class="form-control" :value="tgl_bayar" readonly />
       </div>
 
       <div class="mb-3">
@@ -21,7 +21,6 @@
         </select>
       </div>
 
-      <!-- Info rekening jika transfer -->
       <div v-if="showRekeningCard" class="qr-popup">
         <div class="qr-card">
           <h5 class="text-center">Transfer ke Salah Satu Rekening Berikut</h5>
@@ -34,7 +33,6 @@
         </div>
       </div>
 
-      <!-- Upload jika bukan tunai -->
       <div class="mb-3 mt-3" v-if="metode !== 'Tunai'">
         <label for="bukti" class="form-label">Upload Bukti Pembayaran</label>
         <input type="file" @change="handleFileChange" class="form-control" accept="image/*,.pdf" required />
@@ -51,24 +49,30 @@ export default {
   data() {
     return {
       metode: '',
-      formattedDate: '',
-      jml_bayar: 125000,
-      buktiFile: null,
+      tgl_bayar: '',
+      jml_bayar: 0,
+      bukti_bayar: null,
       id_pemesanan: null,
       showRekeningCard: false
     };
   },
+  computed: {
+    formattedTotal() {
+      return this.jml_bayar ? this.jml_bayar.toLocaleString('id-ID') : '0';
+    }
+  },
   created() {
     const today = new Date();
-    this.formattedDate = today.toISOString().split('T')[0];
+    this.tgl_bayar = today.toISOString().split('T')[0];
 
-    this.id_pemesanan = this.$route.query.id_pemesanan;
-
-    if (!this.id_pemesanan) {
+    const id = parseInt(this.$route.query.id_pemesanan);
+    if (!id || isNaN(id)) {
       alert('ID Pemesanan tidak ditemukan. Silakan ulangi proses pemesanan.');
       this.$router.push('/');
       return;
     }
+
+    this.id_pemesanan = id;
 
     fetch(`http://localhost:8000/api/pemesanan/${this.id_pemesanan}`)
       .then(res => res.json())
@@ -92,27 +96,29 @@ export default {
   },
   methods: {
     handleFileChange(e) {
-      this.buktiFile = e.target.files[0];
+      this.bukti_bayar = e.target.files[0];
     },
     async handlePayment() {
-      if (!this.metode || (this.metode !== 'Tunai' && !this.buktiFile)) {
+      if (!this.metode || (this.metode !== 'Tunai' && !this.bukti_bayar)) {
         alert('Lengkapi semua data!');
         return;
       }
 
       const formData = new FormData();
       formData.append('id_pemesanan', this.id_pemesanan);
-      formData.append('tgl_bayar', this.formattedDate);
-      formData.append('metode', this.metode);
+      formData.append('tgl_bayar', this.tgl_bayar);
       formData.append('jml_bayar', this.jml_bayar);
-
-      if (this.metode !== 'Tunai' && this.buktiFile) {
-        formData.append('bukti_bayar', this.buktiFile);
+      formData.append('metode', this.metode);
+      if (this.metode !== 'Tunai') {
+        formData.append('bukti_bayar', this.bukti_bayar);
       }
 
       try {
         const res = await fetch('http://localhost:8000/api/pembayaran/simpan', {
           method: 'POST',
+          headers: {
+            Accept: 'application/json'
+          },
           body: formData
         });
 
@@ -122,19 +128,19 @@ export default {
         try {
           result = JSON.parse(resultText);
         } catch (jsonErr) {
-          console.error('❌ Respon bukan JSON:', resultText);
+          console.error('Respon bukan JSON:', resultText);
           alert('Server error: ' + resultText);
           return;
         }
 
-        if (res.ok && result.status === 'success') {
-          alert(result.message || 'Pembayaran berhasil!');
+        if (res.ok && result.message) {
+          alert(result.message);
           this.$router.push('/');
         } else {
           alert(result.message || 'Terjadi kesalahan.');
         }
       } catch (err) {
-        console.error('❌ Error saat fetch:', err);
+        console.error('Error saat fetch:', err);
         alert('Gagal melakukan pembayaran.');
       }
     }
