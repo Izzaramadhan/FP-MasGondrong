@@ -12,23 +12,23 @@ class PemesananController extends Controller
         $data = Pemesanan::with(['user', 'kendaraan'])->get();
         return response()->json($data);
     }
+
     public function show($id)
-{
-    $pemesanan = Pemesanan::with(['kendaraan', 'pembayaran'])->find($id);
+    {
+        $pemesanan = Pemesanan::with(['kendaraan', 'pembayaran'])->find($id);
 
-    if (!$pemesanan) {
+        if (!$pemesanan) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Data pemesanan tidak ditemukan.'
+            ], 404);
+        }
+
         return response()->json([
-            'status' => 'error',
-            'message' => 'Data pemesanan tidak ditemukan.'
-        ], 404);
+            'status' => 'success',
+            'data' => $pemesanan
+        ]);
     }
-
-    return response()->json([
-        'status' => 'success',
-        'data' => $pemesanan
-    ]);
-}
-
 
     public function simpan(Request $request)
     {

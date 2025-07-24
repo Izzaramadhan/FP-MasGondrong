@@ -31,7 +31,7 @@ class PembayaranController extends Controller
             'metode' => 'required|string',
             'bukti_bayar' => $request->metode === 'Tunai' ? 'nullable' : 'required|file|image|max:2048',
         ]);
-    
+
         if ($request->metode === 'Tunai') {
             $nama_file = 'tunai.png'; // nama file default yang sudah ada di public/
         } else {
@@ -43,7 +43,7 @@ class PembayaranController extends Controller
                 return response()->json(['error' => 'Bukti bayar wajib diupload jika metode bukan Tunai.'], 400);
             }
         }
-        
+
         $pembayaran = Pembayaran::create([
             'id_pemesanan' => $request->id_pemesanan,
             'tgl_bayar' => $request->tgl_bayar,
@@ -52,11 +52,11 @@ class PembayaranController extends Controller
             'bukti_bayar' => $nama_file,
             'status' => 'belum lunas' // ✅ inilah perbaikannya
         ]);
-        
-    
+
+
         return response()->json(['message' => 'Pembayaran berhasil disimpan', 'data' => $pembayaran], 201);
     }
-    
+
 
     // Update status pembayaran
     public function updateStatus(Request $request)
@@ -75,7 +75,7 @@ class PembayaranController extends Controller
             ], 404);
         }
 
-        $pembayaran->status_pembayaran = $request->status_pembayaran;
+        $pembayaran->status = $request->status_pembayaran;
         $pembayaran->save();
 
         return response()->json([

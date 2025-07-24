@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Pemesanan extends Model
 {
@@ -17,19 +16,21 @@ class Pemesanan extends Model
         'tgl_mulai',
         'tgl_selesai',
         'total_harga',
-        'status',
+        'status'
     ];
-    public function pembayaran()
-{
-    return $this->hasOne(Pembayaran::class, 'id_pemesanan');
-}
 
-
-    public function user(): BelongsTo {
-        return $this->belongsTo(User::class, 'id_user', 'id_user');
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user');
     }
 
-    public function kendaraan(): BelongsTo {
-        return $this->belongsTo(Kendaraan::class, 'id_kendaraan', 'id_kendaraan');
+    public function kendaraan()
+    {
+        return $this->belongsTo(Kendaraan::class, 'id_kendaraan');
+    }
+
+    public function pembayaran()
+    {
+        return $this->hasOne(Pembayaran::class, 'id_pemesanan');
     }
 }
