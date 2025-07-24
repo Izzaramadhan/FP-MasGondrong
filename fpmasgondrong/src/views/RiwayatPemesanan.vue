@@ -9,56 +9,49 @@
     </div>
 
     <div v-else>
-  <div
-    v-for="item in pemesanan"
-    :key="item.id_pemesanan"
-    class="card mb-4 w-100"
-  >
-    <div class="d-flex flex-column flex-md-row">
-      <!-- Gambar -->
-      <div class="flex-shrink-0" style="width: 300px;">
-        <img
-          :src="`http://localhost:8000/uploads/${item.kendaraan.gambar}`"
-          class="img-fluid h-100"
-          alt="Gambar Kendaraan"
-          style="object-fit: cover;"
-          v-if="item.kendaraan && item.kendaraan.gambar"
-        />
-      </div>
+      <div
+        v-for="item in pemesanan"
+        :key="item.id_pemesanan"
+        class="riwayat-card d-flex p-3 mb-4"
+      >
+        <!-- Gambar -->
+        <div class="img-container me-4">
+          <img
+            :src="`http://localhost:8000/storage/kendaraan/${item.kendaraan.gambar}`"
+            alt="Gambar Kendaraan"
+            v-if="item.kendaraan && item.kendaraan.gambar"
+          />
+        </div>
 
-      <!-- Konten -->
-      <div class="p-3 flex-grow-1">
-        <h5 class="mb-3">ID Pemesanan: {{ item.id_pemesanan }}</h5>
+        <!-- Konten -->
+        <div class="flex-grow-1">
+          <h5 class="mb-2">ID Pemesanan: {{ item.id_pemesanan }}</h5>
+          <p><strong>Tanggal Mulai:</strong> {{ formatTanggal(item.tgl_mulai) }}</p>
+          <p><strong>Tanggal Selesai:</strong> {{ formatTanggal(item.tgl_selesai) }}</p>
 
-        <p><strong>Tanggal Mulai:</strong> {{ formatTanggal(item.tgl_mulai) }}</p>
-        <p><strong>Tanggal Selesai:</strong> {{ formatTanggal(item.tgl_selesai) }}</p>
+          <p v-if="item.kendaraan">
+            <strong>Kendaraan:</strong>
+            {{ item.kendaraan.jenis }} - {{ item.kendaraan.tipe }}
+            ({{ item.kendaraan.plat_nomor }})
+          </p>
 
-        <p v-if="item.kendaraan">
-          <strong>Kendaraan:</strong>
-          {{ item.kendaraan.jenis }} - {{ item.kendaraan.tipe }}
-          ({{ item.kendaraan.plat_nomor }})
-        </p>
+          <p><strong>Total Harga:</strong> Rp {{ formatHarga(item.total_harga) }}</p>
 
-        <p><strong>Total Harga:</strong> Rp {{ formatHarga(item.total_harga) }}</p>
-
-        <p>
-          <strong>Status:</strong>
-          <span :class="{
-            'text-warning': item.status === 'diproses',
-            'text-success': item.status === 'selesai',
-            'text-danger': item.status === 'batal'
-          }">
-            {{ item.status }}
-          </span>
-        </p>
+          <p>
+            <strong>Status:</strong>
+            <span :class="{
+              'text-warning': item.status === 'diproses',
+              'text-success': item.status === 'selesai',
+              'text-danger': item.status === 'batal'
+            }">
+              {{ item.status }}
+            </span>
+          </p>
+        </div>
       </div>
     </div>
   </div>
-</div>
-
-  </div>
 </template>
-
 
 <script>
 import axios from 'axios';
@@ -84,17 +77,13 @@ export default {
 
       try {
         const url = `http://localhost:8000/api/pemesanan/riwayat/${id_user}`;
-console.log('🔗 Fetching from:', url);
-const res = await axios.get(url);
-console.log('📥 Response:', res.data);
+        const res = await axios.get(url);
 
-
-if (res.data.status) {
-  this.pemesanan = res.data.data || [];
-} else {
-  alert('Gagal mengambil data pemesanan.');
-}
-
+        if (res.data.status) {
+          this.pemesanan = res.data.data || [];
+        } else {
+          alert('Gagal mengambil data pemesanan.');
+        }
       } catch (err) {
         console.error('Gagal mengambil data pemesanan:', err);
         alert('Terjadi kesalahan saat menghubungi server.');
@@ -113,10 +102,8 @@ if (res.data.status) {
     }
   },
   mounted() {
-  console.log('📦 Halaman RiwayatPemesanan dimuat!');
-  this.fetchPemesanan();
-}
-
+    this.fetchPemesanan();
+  }
 };
 </script>
 
@@ -124,17 +111,28 @@ if (res.data.status) {
 .riwayat-card {
   background-color: #f8f9fa;
   border-left: 5px solid #1E73BE;
+  border-radius: 10px;
   transition: 0.2s ease-in-out;
-  width: 100%;
+  min-height: 180px;
+  align-items: center;
 }
 
 .riwayat-card:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.riwayat-card img {
-  min-height: 200px;
-  max-height: 250px;
+.img-container {
+  width: 240px;
+  height: 150px;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: #eaeaea;
+  flex-shrink: 0;
 }
 
+.img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 </style>

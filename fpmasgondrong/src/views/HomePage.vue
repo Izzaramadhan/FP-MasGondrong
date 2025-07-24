@@ -179,9 +179,9 @@ export default {
     }
 
     const testimonials = ref([
-      { nama: 'Danang', text: 'Pelayanannya cepat dan motornya bersih!', rating: 5 },
-      { nama: 'Ubay', text: 'Mobil Avanza yang saya sewa nyaman dipakai.', rating: 5 },
-      { nama: 'Brodin', text: 'Pertama kali ke Jogja dan bingung cari kendaraan.', rating: 5 }
+      { nama: 'Danang', text: 'Pelayanannya cepat dan motornya bersih! Saya sewa Beat 3 hari dan semuanya lancar. Mas Gondrong juga ramah banget!', rating: 5 },
+      { nama: 'Ubay', text: 'Mobil Avanza yang saya sewa nyaman dipakai untuk perjalanan keluarga. Harganya juga bersahabat. Recommended!', rating: 5 },
+      { nama: 'Brodin', text: 'Pertama kali ke Jogja dan bingung cari kendaraan. Untung ketemu Sewa Kendaraan Mas Gondrong. Prosesnya gampang, motor langsung diantar ke hotel.', rating: 5 }
     ])
 
     const getGambarUrl = (namaFile) => {

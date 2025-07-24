@@ -115,11 +115,12 @@ export default {
           console.error('Gagal mengambil data pembayaran:', err);
         });
     },
-    ubahStatus(id_pembayaran, status) {
-      api.get('pembayaran/update_status', {
-        id_pembayaran,
-        status
-      })
+    ubahStatus(id_pembayaran, status_pembayaran) {
+  api.post('pembayaran/update-status', {
+    id_pembayaran,
+    status_pembayaran
+  })
+
       .then(() => {
         alert('Status berhasil diperbarui!');
         this.generateCharts();

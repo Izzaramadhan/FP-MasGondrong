@@ -82,7 +82,7 @@ export default {
     watch([tglMulai, tglSelesai], hitungTotalHarga)
 
     const gambarKendaraan = computed(() => {
-      return `http://localhost/2/backend/assets/vue/img/kendaraan/${gambarFile.value}`
+      return `http://localhost:8000/storage/kendaraan/${gambarFile.value}`
     })
 
     const pesanKendaraan = async () => {
