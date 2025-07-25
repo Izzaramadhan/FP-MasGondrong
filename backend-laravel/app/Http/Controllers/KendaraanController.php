@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Kendaraan;
 use Illuminate\Support\Facades\Storage;
-
+ // Ambil semua data pembayaran dengan relasi ke pemesanan
 class KendaraanController extends Controller
 {
     public function index()

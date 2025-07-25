@@ -97,7 +97,7 @@
           <div class="col-md-4 mb-3" v-for="(review, i) in testimonials" :key="i">
             <div class="review-card">
               <p>{{ review.text }}</p>
-              <img :src="require('@/assets/images/beranda/logo.jpg')" :alt="review.nama" class="rounded-circle my-2" width="60" height="60" />
+              <img :src="require('@/assets/images/beranda/logobaru.png')" :alt="review.nama" class="rounded-circle my-2" width="60" height="60" />
               <h5>{{ review.nama }}</h5>
               <div class="stars">
                 <i class="fas fa-star" v-for="s in review.rating" :key="s"></i>
