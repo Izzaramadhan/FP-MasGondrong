@@ -1,4 +1,8 @@
 *
-!private/
 !public/
+!private/
+!public/kendaraan/
+!public/kendaraan/**/*
+!public/bukti_bayar/
+!public/bukti_bayar/**/*
 !.gitignore
