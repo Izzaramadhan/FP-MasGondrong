@@ -61,24 +61,26 @@ export default {
       formData.append('harga_perhari', this.harga_perhari)
       formData.append('gambar', this.gambar)
 
-      try {
-        const response = await axios.post(
-          'http://localhost:8000/api/kendaraan/simpan',
-          formData,
-          { headers: { 'Content-Type': 'multipart/form-data' } }
-        )
+   try {
+  const response = await axios.post(
+    'http://localhost:8000/api/kendaraan/simpan',
+    formData,
+    { headers: { 'Content-Type': 'multipart/form-data' } }
+  )
 
-        if (response.data.status === 'success') {
-          alert('✅ Kendaraan berhasil ditambahkan!')
-          this.$router.push('/admin/manage-kendaraan')
-        } else {
-          const msg = response.data.message || 'Gagal menyimpan kendaraan.'
-          alert('❌ ' + msg)
-        }
-      } catch (err) {
-        console.error('❌ Gagal menyimpan kendaraan:', err)
-        alert('Terjadi kesalahan saat menghubungi server.')
-      }
+  console.log(response.data) // Debug
+
+  if (response.data.status === 'success' || response.data.status === true || response.data.message.includes('berhasil')) {
+    alert('✅ ' + response.data.message)
+    this.$router.push('/admin/manage-kendaraan')
+  } else {
+    alert('❌ ' + (response.data.message || 'Gagal menyimpan kendaraan.'))
+  }
+} catch (err) {
+  console.error('❌ Gagal menyimpan kendaraan:', err)
+  alert('Terjadi kesalahan saat menghubungi server.')
+}
+
     }
   }
 }
